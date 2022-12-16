@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom"
 export default function Navbar({user}){
 
-
     return (
 
         <nav className="navbar">
@@ -15,8 +14,7 @@ export default function Navbar({user}){
              <div>
                 {user &&
                 <>
-                <img src={user.src} alt="profile image"></img>
-                <p>{user.name}</p>
+                <p>{user.displayName}</p>
                 </>
                } 
              </div>
