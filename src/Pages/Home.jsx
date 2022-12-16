@@ -4,12 +4,8 @@ export default function Home({user,setUser}){
 
     return (
 
-     <div className="home">
-       
+     <div className="home">    
              <SignIn user={user} setUser={setUser} />
-        
-     
-
 
      </div>
     )

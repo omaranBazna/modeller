@@ -1,13 +1,10 @@
 
-export default function Home({user,setUser}){
+export default function Models({user}){
     return (
 
-     <div className="home">
-       
-             <SignIn user={user} setUser={setUser} />
-        
-     
-
+     <div className="model">
+       <h1>Model</h1>
+         
 
      </div>
     )
