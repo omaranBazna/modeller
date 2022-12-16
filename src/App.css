@@ -44,8 +44,10 @@ flex-direction: column;
   width:20px;
   height:2px;
   background-color: white;
+  border-radius:1px;
   transition: 0.3s;
 }
 .navbar ul li:hover div{
 width:60px;
+height:3px;
 }
