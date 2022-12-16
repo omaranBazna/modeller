@@ -5,6 +5,8 @@
   padding:0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
+  height:100vh;
+  
 }
 a{
   text-decoration: none;
@@ -49,4 +51,36 @@ flex-direction: column;
 .navbar ul li:hover div{
 width:60px;
 height:3px;
+}
+.home{
+  height:60%;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+}
+
+/*Sign In form*/
+.sign-form{
+  margin:20px;
+  height:200px;
+  width:400px;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  background-color: rgb(240, 240, 204);
+  border-radius:10px;
+}
+.sign-form button{
+  border:none;
+  outline:none;
+
+  padding:10px;
+  border-radius:10px;
+}
+.sign-in-btn{
+    background-color:greenyellow;
+}
+.sign-out-btn{
+  background-color:rgb(240, 98, 79);
+  color:white;
 }

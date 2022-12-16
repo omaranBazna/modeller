@@ -26,11 +26,11 @@ const handleSignOut=async(e)=>{
 
     return (
 
-        <form>
+        <form className="sign-form">
             
 
-           {!user && <button onClick={(e)=>{handleSignIn(e)}} type="submit" >LogIn</button>}
-           {user && <button onClick={(e)=>{handleSignOut(e)}} type="submit" >Sign Out</button>}
+           {!user && <button className="sign-in-btn" onClick={(e)=>{handleSignIn(e)}} type="submit" >LogIn</button>}
+           {user && <button className="sign-out-btn"  onClick={(e)=>{handleSignOut(e)}} type="submit" >Sign Out</button>}
 
         </form>
     )
