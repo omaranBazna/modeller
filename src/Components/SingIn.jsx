@@ -1,12 +1,26 @@
-export default function SignIn({user}){
+import { signInF } from "../utils/firebase";
+import { signOutF } from "../utils/firebase";
+export default function SignIn({user,setUser}){
    
   
 const handleSignIn=async(e)=>{
     e.preventDefault();
+    const cred=await signInF();
+    if(cred){
+        setUser(cred)
+    }else{
+        setUser(null);
+    }
 
 }
 const handleSignOut=async(e)=>{
     e.preventDefault();
+    const cred=await signOutF();
+    if(cred){
+        setUser(cred)
+    }else{
+        setUser(null);
+    }
     
 }
 
