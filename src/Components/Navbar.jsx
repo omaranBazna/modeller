@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom"
-export default function Navbar(){
+export default function Navbar({user}){
 
 
     return (
@@ -13,7 +13,12 @@ export default function Navbar(){
              </ul>
 
              <div>
-                <img src="" alt="profile image"></img>
+                {user &&
+                <>
+                <img src={user.src} alt="profile image"></img>
+                <p>{user.name}</p>
+                </>
+               } 
              </div>
         </nav>
     )

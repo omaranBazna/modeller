@@ -37,7 +37,6 @@ justify-content: center;
 flex-direction: column;
 }
 .navbar ul li div{
-
   position:relative;
   left:0px;
   top:2px;
