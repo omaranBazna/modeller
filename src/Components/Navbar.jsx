@@ -7,13 +7,13 @@ export default function Navbar(){
 
         <nav className="navbar">
              <ul>
-               <li><Link to="/" >Home</Link></li>
-               <li><Link to="/models" >Models</Link></li>
-               <li><Link to="design">Design</Link></li>
+               <li><Link to="/" >Home</Link><div></div></li>
+               <li><Link to="/models" >Models</Link><div></div></li>
+               <li><Link to="design">Design</Link><div></div></li>
              </ul>
 
              <div>
-                <img ></img>
+                <img src="" alt="profile image"></img>
              </div>
         </nav>
     )
