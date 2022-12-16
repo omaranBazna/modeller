@@ -38,7 +38,7 @@ const geometry = new THREE.SphereGeometry(
 
 const geometry2 = new THREE.Mesh();
 const material = new THREE.MeshStandardMaterial({
-  map: texture,
+  color: "red",
 });
 
 const Obj = new THREE.Mesh(geometry, material);
