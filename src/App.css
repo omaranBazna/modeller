@@ -1,3 +1,30 @@
+/*Set up the styling */
 .App {
   text-align: center;
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+a{
+  text-decoration: none;
+  color:inherit;
+}
+/*Styling the navbar*/
+
+nav{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+nav div{
+  width:100px;
+}
+.navbar ul{
+  width:100%;
+display:flex;
+align-items: center;
+justify-content: space-around;
+}
+.navbar ul li{
+list-style-type: none;
 }
