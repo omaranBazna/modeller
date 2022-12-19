@@ -13,6 +13,8 @@ const [color,setColor]=useState("green")
 const [tool,setTool]=useState("brush")
 
 
+
+
 const setUpThree=()=>{
     
   
@@ -100,6 +102,9 @@ loader.load( MODEL, function (gltf) {
       alpha: true,
     });
     
+
+
+    let radius=0.02;
     renderer.setPixelRatio(window.devicePixelRatio);
     
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -290,11 +295,19 @@ scene.add(light8);
             return
         }
       Obj.rotation.y = 120;
-      //Obj.position.x += 0.3;
-      control.enabled=true
+     
+ 
      
      
       renderer.render(scene, camera);
+
+          if(document.getElementById("toolEl").value=="brush"){
+            control.enabled=false;
+
+
+     
+
+
     if(mouseClicked ){
 
       raycaster.setFromCamera( pointer, camera );
@@ -313,11 +326,9 @@ scene.add(light8);
          }
          const pos=[min.uv.x,min.uv.y];
 
-
-     
-
+ 
       const minArr=[]
-      const radius=0.02;
+     
   
       for(let i=0;i<36;i++){
         const point_i=new THREE.Vector2(0,0);
@@ -339,7 +350,7 @@ scene.add(light8);
         minArr.push([min.uv.x,min.uv.y])
          }
       }
-      console.log(minArr)
+    
         
       
 
@@ -379,17 +390,10 @@ scene.add(light8);
        }
            
           
-          //  ctx.lineTo(xPos,yPos)
-     
-
-/*
-        ctx.moveTo(0, 0);
-ctx.lineTo(1000,500);
-ctx.lineTo(500, 1000);
-ctx.lineTo(0, 900);
-*/
-        //ctx.closePath();
+       
         ctx.fill();
+
+        
     }
 
 
@@ -406,13 +410,16 @@ ctx.lineTo(0, 900);
 
 
 
-      control.enabled=false;
+      
         }
+      }
+    }else if(document.getElementById("toolEl").value=="rotate"){
+   control.enabled=true;
     }
     }
 
 
-
+  
   
     animate();
     
