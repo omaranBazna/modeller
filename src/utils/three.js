@@ -3,7 +3,6 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
-
 let radius = 0.05;
 let mouseClicked = false;
 let Obj;
@@ -17,9 +16,7 @@ let canvas;
 let ctx;
 let h;
 let w;
-
 const pointer = new THREE.Vector2();
-
 const setUpLight = (scene) => {
   const light = new THREE.PointLight(0xffffff);
   light.position.set(10, 20, 10);
@@ -144,7 +141,6 @@ const loadModel = (scene) => {
     }
   );
 };
-
 const setUpListener = () => {
   btnEl.addEventListener("click", () => {
     ctx.fillStyle = "#ffffff";
@@ -179,7 +175,6 @@ const setUpListener = () => {
     mouseClicked = false;
   });
 };
-
 const animate = () => {
   requestAnimationFrame(animate);
 
@@ -354,7 +349,6 @@ const animate = () => {
 
   updateObjTex(Obj);
 };
-
 export const setUpThree = () => {
   btnEl = document.getElementById("btn");
   canvas = document.getElementById("draw");
