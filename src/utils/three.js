@@ -176,7 +176,9 @@ export const setUpThree = () => {
     });
   };
   const animate = () => {
-    requestAnimationFrame(animate);
+    setTimeout(() => {
+      requestAnimationFrame(animate);
+    }, 150);
 
     if (!Obj) {
       return;
@@ -252,6 +254,8 @@ export const setUpThree = () => {
           }
 
           ctx.fill();
+        } else {
+          ctx.drawImage(document.getElementById("copy"), 0, 0);
         }
       }
     } else if (option === "fill") {
@@ -339,6 +343,8 @@ export const setUpThree = () => {
               break;
             }
           }
+        } else {
+          ctx.drawImage(document.getElementById("copy"), 0, 0);
         }
       }
     } else if (option === "rotate") {
@@ -374,5 +380,6 @@ export const setUpThree = () => {
 
   raycaster = new THREE.Raycaster();
   setUpListener();
+  updateCopy();
   animate();
 };
