@@ -1,8 +1,6 @@
 import * as THREE from "three";
-
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
 import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
 
@@ -43,7 +41,7 @@ const setUpLight = (scene) => {
 };
 
 const updateObjTex = (Obj) => {
-  texture = new THREE.TextureLoader().load(
+  let texture = new THREE.TextureLoader().load(
     document.querySelector("#draw").toDataURL("image/png")
   );
   texture.wrapS = THREE.RepeatWrapping;
@@ -52,33 +50,76 @@ const updateObjTex = (Obj) => {
   const new_material = new THREE.MeshStandardMaterial({
     map: texture,
   });
-
   Obj.material = new_material;
 };
+
+const calculateMinArr = (
+  raycaster,
+  pointer,
+  camera,
+  minArr,
+  Obj,
+  radius,
+  pos
+) => {
+  raycaster.setFromCamera(pointer, camera);
+  const intersection = raycaster.intersectObject(Obj);
+  if (intersection.length > 0) {
+    let min = intersection[0];
+    for (let el of intersection) {
+      if (el.distance < min.distance) {
+        min = el;
+      }
+    }
+    const pos = [min.uv.x, min.uv.y];
+
+    for (let i = 0; i < 36; i++) {
+      const point_i = new THREE.Vector2(0, 0);
+      point_i.x = pointer.x + radius * Math.cos((i / 36) * Math.PI * 2);
+      point_i.y = pointer.y + radius * Math.sin((i / 36) * Math.PI * 2) * 2;
+
+      raycaster.setFromCamera(point_i, camera);
+
+      const intersection1 = raycaster.intersectObject(Obj);
+
+      let min = intersection1[0];
+      for (let el of intersection1) {
+        if (el.distance < min.distance) {
+          min = el;
+        }
+      }
+      // console.log(min.uv)
+      if (min) {
+        minArr.push([min.uv.x, min.uv.y]);
+      }
+    }
+  }
+};
+const updateCopy = () => {
+  document
+    .getElementById("copy")
+    .getContext("2d")
+    .drawImage(document.getElementById("draw"), 0, 0);
+};
+
 export const setUpThree = () => {
   let mouseClicked = false;
   const btnEl = document.getElementById("btn");
   var canvas = document.getElementById("draw");
   var context = canvas.getContext("2d");
-
   btnEl.addEventListener("click", () => {
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
-    document
-      .getElementById("copy")
-      .getContext("2d")
-      .drawImage(document.getElementById("draw"), 0, 0);
+    updateCopy();
     updateObjTex(Obj);
   });
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   const scene = new THREE.Scene();
-
   let Obj;
   const loader = new GLTFLoader();
 
-  console.log(loader.load);
   loader.load(
     MODEL,
     function (gltf) {
@@ -131,23 +172,12 @@ export const setUpThree = () => {
     }
   });
   renderer.setPixelRatio(window.devicePixelRatio);
-
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.position.setX(-5);
   camera.position.setZ(25);
   camera.position.setY(21);
 
   renderer.render(scene, camera);
-
-  let texture = new THREE.TextureLoader().load(
-    document.querySelector("#draw").toDataURL("image/png")
-  );
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(1, 1);
-  const material = new THREE.MeshStandardMaterial({
-    map: texture,
-  });
 
   /*light here */
   setUpLight(scene);
@@ -169,11 +199,6 @@ export const setUpThree = () => {
     mouseClicked = false;
   });
 
-  document
-    .getElementById("copy")
-    .getContext("2d")
-    .drawImage(document.getElementById("draw"), 0, 0);
-
   function animate() {
     requestAnimationFrame(animate);
 
@@ -183,251 +208,109 @@ export const setUpThree = () => {
     Obj.rotation.y = 120;
 
     renderer.render(scene, camera);
+    const option = document.querySelector(".toolEl").getAttribute("data-tool");
 
-    if (
-      document.querySelector(".toolEl").getAttribute("data-tool") == "brush"
-    ) {
+    if (option == "brush") {
       control.enabled = false;
 
       if (mouseClicked) {
-        raycaster.setFromCamera(pointer, camera);
+        /*minArr */
+        const minArr = [];
+        const pos = [0, 0];
+        calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
 
-        const intersection = raycaster.intersectObject(Obj);
+        var canvas = document.getElementById("draw");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = document
+          .getElementById("colorEl")
+          .getAttribute("data-color");
 
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
+        const h = canvas.height;
+        const w = canvas.width;
 
-          const minArr = [];
+        if (minArr[0]) {
+          ctx.beginPath();
+          let xPos = minArr[0][0] * w;
+          let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
 
-          for (let i = 0; i < 36; i++) {
-            const point_i = new THREE.Vector2(0, 0);
-            point_i.x = pointer.x + radius * Math.cos((i / 36) * Math.PI * 2);
-            point_i.y =
-              pointer.y + radius * Math.sin((i / 36) * Math.PI * 2) * 2;
+          for (let i = 1; i < 36; i++) {
+            xPos = minArr[i][0] * w;
+            yPos = h / 2 - (minArr[i][1] - 0.5) * h;
+            let d = Math.sqrt(
+              (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
+                (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
+            );
 
-            raycaster.setFromCamera(point_i, camera);
-
-            const intersection1 = raycaster.intersectObject(Obj);
-
-            let min = intersection1[0];
-            for (let el of intersection1) {
-              if (el.distance < min.distance) {
-                min = el;
-              }
-            }
-            // console.log(min.uv)
-            if (min) {
-              minArr.push([min.uv.x, min.uv.y]);
+            if (d < 0.2) {
+              ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
             }
           }
 
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
-
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          const h = canvas.height;
-          const w = canvas.width;
-
-          if (minArr[0]) {
-            ctx.beginPath();
-
-            //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
-
-            let xPos = minArr[0][0] * w;
-            let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
-
-            for (let i = 1; i < 36; i++) {
-              xPos = minArr[i][0] * w;
-              yPos = h / 2 - (minArr[i][1] - 0.5) * h;
-              let d = Math.sqrt(
-                (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
-                  (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
-              );
-
-              if (d < 0.2) {
-                ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
-              }
-            }
-
-            ctx.fill();
-
-            document
-              .getElementById("copy")
-              .getContext("2d")
-              .drawImage(document.getElementById("draw"), 0, 0);
-          }
+          ctx.fill();
         }
       } else {
-        raycaster.setFromCamera(pointer, camera);
+        /*minArr */
+        const minArr = [];
+        const pos = [0, 0];
+        calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
 
-        const intersection = raycaster.intersectObject(Obj);
+        var canvas = document.getElementById("draw");
+        var ctx = canvas.getContext("2d");
 
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
+        ctx.fillStyle = document
+          .getElementById("colorEl")
+          .getAttribute("data-color");
 
-          const minArr = [];
+        const h = canvas.height;
+        const w = canvas.width;
 
-          for (let i = 0; i < 36; i++) {
-            const point_i = new THREE.Vector2(0, 0);
-            point_i.x = pointer.x + radius * Math.cos((i / 36) * Math.PI * 2);
-            point_i.y =
-              pointer.y + radius * Math.sin((i / 36) * Math.PI * 2) * 2;
-
-            raycaster.setFromCamera(point_i, camera);
-
-            const intersection1 = raycaster.intersectObject(Obj);
-
-            let min = intersection1[0];
-            for (let el of intersection1) {
-              if (el.distance < min.distance) {
-                min = el;
-              }
-            }
-            // console.log(min.uv)
-            if (min) {
-              minArr.push([min.uv.x, min.uv.y]);
-            }
-          }
-
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
-
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          const h = canvas.height;
-          const w = canvas.width;
-
-          if (minArr[0]) {
-            ctx.beginPath();
-
-            //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
-
-            let xPos = minArr[0][0] * w;
-            let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
-
-            ctx.drawImage(document.getElementById("copy"), 0, 0);
-
-            for (let i = 1; i < 36; i++) {
-              xPos = minArr[i][0] * w;
-              yPos = h / 2 - (minArr[i][1] - 0.5) * h;
-              let d = Math.sqrt(
-                (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
-                  (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
-              );
-
-              if (d < 0.2) {
-                ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
-              }
-            }
-
-            ctx.fill();
-          }
-        }
-      }
-    } else if (
-      document.querySelector(".toolEl").getAttribute("data-tool") == "rotate"
-    ) {
-      control.enabled = true;
-    } else if (
-      document.querySelector(".toolEl").getAttribute("data-tool") == "fill"
-    ) {
-      control.enabled = false;
-
-      if (mouseClicked) {
-        raycaster.setFromCamera(pointer, camera);
-
-        const intersection = raycaster.intersectObject(Obj);
-
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
-
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          const h = canvas.height;
-          const w = canvas.width;
-
-          //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
-
-          let xPos = pos[0] * w;
-          let yPos = h / 2 - (pos[1] - 0.5) * h;
-
-          for (let region of regions) {
-            if (
-              xPos >= region[0] &&
-              yPos >= region[1] &&
-              xPos <= region[2] &&
-              yPos <= region[3]
-            ) {
-              console.log(region);
-              console.log(xPos, yPos);
-
-              ctx.fillRect(
-                region[0],
-                region[1],
-                region[2] - region[0],
-                region[3] - region[1]
-              );
-              ctx.fill();
-              break;
-            }
-          }
-
-          document
-            .getElementById("copy")
-            .getContext("2d")
-            .drawImage(document.getElementById("draw"), 0, 0);
-        }
-      } else {
-        raycaster.setFromCamera(pointer, camera);
-
-        const intersection = raycaster.intersectObject(Obj);
-
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
-
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          const h = canvas.height;
-          const w = canvas.width;
-
+        if (minArr[0]) {
+          ctx.beginPath();
+          let xPos = minArr[0][0] * w;
+          let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
           ctx.drawImage(document.getElementById("copy"), 0, 0);
+          for (let i = 1; i < 36; i++) {
+            xPos = minArr[i][0] * w;
+            yPos = h / 2 - (minArr[i][1] - 0.5) * h;
+            let d = Math.sqrt(
+              (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
+                (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
+            );
+
+            if (d < 0.2) {
+              ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
+            }
+          }
+
+          ctx.fill();
+        }
+      }
+    } else if (option == "fill") {
+      control.enabled = false;
+
+      if (mouseClicked) {
+        raycaster.setFromCamera(pointer, camera);
+
+        const intersection = raycaster.intersectObject(Obj);
+
+        if (intersection.length > 0) {
+          let min = intersection[0];
+          for (let el of intersection) {
+            if (el.distance < min.distance) {
+              min = el;
+            }
+          }
+          const pos = [min.uv.x, min.uv.y];
+
+          var canvas = document.getElementById("draw");
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle = document
+            .getElementById("colorEl")
+            .getAttribute("data-color");
+
+          const h = canvas.height;
+          const w = canvas.width;
+
           //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
 
           let xPos = pos[0] * w;
@@ -454,7 +337,56 @@ export const setUpThree = () => {
             }
           }
         }
+      } else {
+        raycaster.setFromCamera(pointer, camera);
+
+        const intersection = raycaster.intersectObject(Obj);
+
+        if (intersection.length > 0) {
+          let min = intersection[0];
+          for (let el of intersection) {
+            if (el.distance < min.distance) {
+              min = el;
+            }
+          }
+          const pos = [min.uv.x, min.uv.y];
+
+          var canvas = document.getElementById("draw");
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle = document
+            .getElementById("colorEl")
+            .getAttribute("data-color");
+
+          const h = canvas.height;
+          const w = canvas.width;
+          ctx.drawImage(document.getElementById("copy"), 0, 0);
+          let xPos = pos[0] * w;
+          let yPos = h / 2 - (pos[1] - 0.5) * h;
+
+          for (let region of regions) {
+            if (
+              xPos >= region[0] &&
+              yPos >= region[1] &&
+              xPos <= region[2] &&
+              yPos <= region[3]
+            ) {
+              console.log(region);
+              console.log(xPos, yPos);
+
+              ctx.fillRect(
+                region[0],
+                region[1],
+                region[2] - region[0],
+                region[3] - region[1]
+              );
+              ctx.fill();
+              break;
+            }
+          }
+        }
       }
+    } else if (option == "rotate") {
+      control.enabled = true;
     }
 
     updateObjTex(Obj);
