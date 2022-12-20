@@ -12,6 +12,7 @@ const handleSignIn=async(e)=>{
         setUser(cred)
     }else{
         setUser(null);
+        window.localStorage.setItem("token","");
     }
 
 }
@@ -22,6 +23,7 @@ const handleSignOut=async(e)=>{
         setUser(cred)
     }else{
         setUser(null);
+        window.localStorage.setItem("user","");
     }
     
 }

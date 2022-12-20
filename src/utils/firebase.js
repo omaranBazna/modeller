@@ -5,6 +5,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  signInWithCustomToken,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
@@ -35,25 +38,37 @@ export const addToDataBase = async (user) => {
     console.log(e);
   }
 };
-export const signInF = () =>
-  signInWithPopup(auth, provider)
+
+export const singInWithToken = (token) => {
+  return signInWithCustomToken(auth, token)
     .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-
-      return user;
-      // ...
+      console.log("result", result);
+      return result.user;
     })
-    .then((user) => {
-      return user;
-    })
-    .catch((error) => {
-      console.log(error);
-      /*
+    .catch((e) => console.log(e));
+};
+export const signInF = () => {
+  return setPersistence(auth, browserSessionPersistence).then(() => {
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log(credential);
+        const token = credential.accessToken;
+
+        // The signed-in user info.
+        const user = result.user;
+
+        window.localStorage.setItem("user", JSON.stringify(user));
+        return user;
+        // ...
+      })
+      .then((user) => {
+        return user;
+      })
+      .catch((error) => {
+        console.log(error);
+        /*
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -62,9 +77,11 @@ export const signInF = () =>
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error);
       */
-      return null;
-      // ...
-    });
+        return null;
+        // ...
+      });
+  });
+};
 export const signOutF = () =>
   signOut(auth)
     .then(() => {

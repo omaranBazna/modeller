@@ -4,9 +4,9 @@ import { HexColorPicker } from "react-colorful";
 
 
 import { useNavigate } from "react-router-dom";
-
+import{singInWithToken} from "../utils/firebase"
 import { setUpThree } from "../utils/three";
-export default function Design({user}){
+export default function Design({user,setUser}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
  
@@ -15,11 +15,23 @@ const [tool,setTool]=useState("rotate")
 
 
 
+
     useEffect(()=>{
-      if(!user){
-        navigator("/")
-      }
-        setUpThree();
+
+   const userString=window.localStorage.getItem("user")
+  
+   if(userString !=""){
+    const userf=JSON.parse(userString);
+   setUser(userf)
+  
+   if(!userf){
+    navigator("/")
+    
+   }
+   }else{
+    navigator("/")
+   }
+   setUpThree();
     },[])
     return (
 

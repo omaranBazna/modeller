@@ -12,8 +12,14 @@ function App() {
     <div className="App">
       <Navbar user={user} />
       <Routes>
-        <Route path="/models" element={<Models user={user} />} />
-        <Route path="/design" element={<Design user={user} />} />
+        <Route
+          path="/models"
+          element={<Models user={user} setUser={setUser} />}
+        />
+        <Route
+          path="/design"
+          element={<Design user={user} setUser={setUser} />}
+        />
         <Route path="/" element={<Home user={user} setUser={setUser} />} />
       </Routes>
     </div>
