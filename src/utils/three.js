@@ -175,13 +175,186 @@ const setUpListener = () => {
   });
 };
 
+const animate = () => {
+  requestAnimationFrame(animate);
+
+  if (!Obj) {
+    return;
+  }
+  Obj.rotation.y = 120;
+
+  renderer.render(scene, camera);
+  const option = document.querySelector(".toolEl").getAttribute("data-tool");
+
+  if (option === "brush") {
+    control.enabled = false;
+
+    if (mouseClicked) {
+      const minArr = [];
+      const pos = [0, 0];
+      calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
+
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = document
+        .getElementById("colorEl")
+        .getAttribute("data-color");
+
+      if (minArr[0]) {
+        ctx.beginPath();
+        let xPos = minArr[0][0] * w;
+        let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
+
+        for (let i = 1; i < 36; i++) {
+          xPos = minArr[i][0] * w;
+          yPos = h / 2 - (minArr[i][1] - 0.5) * h;
+          let d = Math.sqrt(
+            (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
+              (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
+          );
+
+          if (d < 0.2) {
+            ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
+          }
+        }
+
+        ctx.fill();
+      }
+      updateCopy();
+    } else {
+      /*minArr */
+      const minArr = [];
+      const pos = [0, 0];
+      calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
+      ctx.fillStyle = document
+        .getElementById("colorEl")
+        .getAttribute("data-color");
+
+      if (minArr[0]) {
+        ctx.beginPath();
+        let xPos = minArr[0][0] * w;
+        let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
+        ctx.drawImage(document.getElementById("copy"), 0, 0);
+        for (let i = 1; i < 36; i++) {
+          xPos = minArr[i][0] * w;
+          yPos = h / 2 - (minArr[i][1] - 0.5) * h;
+          let d = Math.sqrt(
+            (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
+              (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
+          );
+
+          if (d < 0.2) {
+            ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
+          }
+        }
+
+        ctx.fill();
+      }
+    }
+  } else if (option === "fill") {
+    control.enabled = false;
+
+    if (mouseClicked) {
+      raycaster.setFromCamera(pointer, camera);
+
+      const intersection = raycaster.intersectObject(Obj);
+
+      if (intersection.length > 0) {
+        let min = intersection[0];
+        for (let el of intersection) {
+          if (el.distance < min.distance) {
+            min = el;
+          }
+        }
+        const pos = [min.uv.x, min.uv.y];
+
+        ctx.fillStyle = document
+          .getElementById("colorEl")
+          .getAttribute("data-color");
+
+        //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
+
+        let xPos = pos[0] * w;
+        let yPos = h / 2 - (pos[1] - 0.5) * h;
+
+        for (let region of regions) {
+          if (
+            xPos >= region[0] &&
+            yPos >= region[1] &&
+            xPos <= region[2] &&
+            yPos <= region[3]
+          ) {
+            console.log(region);
+            console.log(xPos, yPos);
+
+            ctx.fillRect(
+              region[0],
+              region[1],
+              region[2] - region[0],
+              region[3] - region[1]
+            );
+            ctx.fill();
+            break;
+          }
+        }
+      }
+      updateCopy();
+    } else {
+      raycaster.setFromCamera(pointer, camera);
+
+      const intersection = raycaster.intersectObject(Obj);
+
+      if (intersection.length > 0) {
+        let min = intersection[0];
+        for (let el of intersection) {
+          if (el.distance < min.distance) {
+            min = el;
+          }
+        }
+        const pos = [min.uv.x, min.uv.y];
+
+        ctx.fillStyle = document
+          .getElementById("colorEl")
+          .getAttribute("data-color");
+
+        ctx.drawImage(document.getElementById("copy"), 0, 0);
+
+        let xPos = pos[0] * w;
+        let yPos = h / 2 - (pos[1] - 0.5) * h;
+
+        for (let region of regions) {
+          if (
+            xPos >= region[0] &&
+            yPos >= region[1] &&
+            xPos <= region[2] &&
+            yPos <= region[3]
+          ) {
+            console.log(region);
+            console.log(xPos, yPos);
+
+            ctx.fillRect(
+              region[0],
+              region[1],
+              region[2] - region[0],
+              region[3] - region[1]
+            );
+            ctx.fill();
+            break;
+          }
+        }
+      }
+    }
+  } else if (option === "rotate") {
+    control.enabled = true;
+  }
+
+  updateObjTex(Obj);
+};
+
 export const setUpThree = () => {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
   const scene = new THREE.Scene();
   Obj = loadModel(scene);
-
   const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -192,7 +365,6 @@ export const setUpThree = () => {
     canvas: document.querySelector("#bg"),
     alpha: true,
   });
-
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.position.setX(-5);
@@ -205,181 +377,5 @@ export const setUpThree = () => {
   pointer.x = 200000;
   const raycaster = new THREE.Raycaster();
   setUpListener();
-
-  function animate() {
-    requestAnimationFrame(animate);
-
-    if (!Obj) {
-      return;
-    }
-    Obj.rotation.y = 120;
-
-    renderer.render(scene, camera);
-    const option = document.querySelector(".toolEl").getAttribute("data-tool");
-
-    if (option === "brush") {
-      control.enabled = false;
-
-      if (mouseClicked) {
-        const minArr = [];
-        const pos = [0, 0];
-        calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
-
-        var ctx = canvas.getContext("2d");
-        ctx.fillStyle = document
-          .getElementById("colorEl")
-          .getAttribute("data-color");
-
-        if (minArr[0]) {
-          ctx.beginPath();
-          let xPos = minArr[0][0] * w;
-          let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
-
-          for (let i = 1; i < 36; i++) {
-            xPos = minArr[i][0] * w;
-            yPos = h / 2 - (minArr[i][1] - 0.5) * h;
-            let d = Math.sqrt(
-              (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
-                (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
-            );
-
-            if (d < 0.2) {
-              ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
-            }
-          }
-
-          ctx.fill();
-        }
-        updateCopy();
-      } else {
-        /*minArr */
-        const minArr = [];
-        const pos = [0, 0];
-        calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
-        ctx.fillStyle = document
-          .getElementById("colorEl")
-          .getAttribute("data-color");
-
-        if (minArr[0]) {
-          ctx.beginPath();
-          let xPos = minArr[0][0] * w;
-          let yPos = h / 2 - (minArr[0][1] - 0.5) * h;
-          ctx.drawImage(document.getElementById("copy"), 0, 0);
-          for (let i = 1; i < 36; i++) {
-            xPos = minArr[i][0] * w;
-            yPos = h / 2 - (minArr[i][1] - 0.5) * h;
-            let d = Math.sqrt(
-              (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
-                (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
-            );
-
-            if (d < 0.2) {
-              ctx.arc(xPos, yPos, 0, 0, 2 * Math.PI);
-            }
-          }
-
-          ctx.fill();
-        }
-      }
-    } else if (option === "fill") {
-      control.enabled = false;
-
-      if (mouseClicked) {
-        raycaster.setFromCamera(pointer, camera);
-
-        const intersection = raycaster.intersectObject(Obj);
-
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
-
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
-
-          let xPos = pos[0] * w;
-          let yPos = h / 2 - (pos[1] - 0.5) * h;
-
-          for (let region of regions) {
-            if (
-              xPos >= region[0] &&
-              yPos >= region[1] &&
-              xPos <= region[2] &&
-              yPos <= region[3]
-            ) {
-              console.log(region);
-              console.log(xPos, yPos);
-
-              ctx.fillRect(
-                region[0],
-                region[1],
-                region[2] - region[0],
-                region[3] - region[1]
-              );
-              ctx.fill();
-              break;
-            }
-          }
-        }
-        updateCopy();
-      } else {
-        raycaster.setFromCamera(pointer, camera);
-
-        const intersection = raycaster.intersectObject(Obj);
-
-        if (intersection.length > 0) {
-          let min = intersection[0];
-          for (let el of intersection) {
-            if (el.distance < min.distance) {
-              min = el;
-            }
-          }
-          const pos = [min.uv.x, min.uv.y];
-
-          ctx.fillStyle = document
-            .getElementById("colorEl")
-            .getAttribute("data-color");
-
-          ctx.drawImage(document.getElementById("copy"), 0, 0);
-
-          let xPos = pos[0] * w;
-          let yPos = h / 2 - (pos[1] - 0.5) * h;
-
-          for (let region of regions) {
-            if (
-              xPos >= region[0] &&
-              yPos >= region[1] &&
-              xPos <= region[2] &&
-              yPos <= region[3]
-            ) {
-              console.log(region);
-              console.log(xPos, yPos);
-
-              ctx.fillRect(
-                region[0],
-                region[1],
-                region[2] - region[0],
-                region[3] - region[1]
-              );
-              ctx.fill();
-              break;
-            }
-          }
-        }
-      }
-    } else if (option === "rotate") {
-      control.enabled = true;
-    }
-
-    updateObjTex(Obj);
-  }
-
   animate();
 };
