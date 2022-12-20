@@ -100,9 +100,7 @@ height:3px;
   overflow: hidden;
  
 }
-#draw{
-  display:none;
-}
+
 .colorEl{
   position:absolute;
   top:100px;
