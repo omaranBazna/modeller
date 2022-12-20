@@ -17,7 +17,7 @@ let ctx;
 let h;
 let w;
 const pointer = new THREE.Vector2();
-const setUpLight = (scene) => {
+const setUpLight = () => {
   const light = new THREE.PointLight(0xffffff);
   light.position.set(10, 20, 10);
   light.intensity = 0.7;
@@ -51,7 +51,7 @@ const setUpLight = (scene) => {
   light8.intensity = 0.4;
   scene.add(light8);
 };
-const updateObjTex = (Obj) => {
+const updateObjTex = () => {
   let texture = new THREE.TextureLoader().load(
     document.querySelector("#draw").toDataURL("image/png")
   );
@@ -112,7 +112,7 @@ const updateCopy = () => {
     .getContext("2d")
     .drawImage(document.getElementById("draw"), 0, 0);
 };
-const loadModel = (scene) => {
+const loadModel = () => {
   let Obj;
   const loader = new GLTFLoader();
   loader.load(
@@ -146,7 +146,7 @@ const setUpListener = () => {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     updateCopy();
-    updateObjTex(Obj);
+    updateObjTex();
   });
   window.addEventListener("mousewheel", (e) => {
     e.preventDefault();
@@ -347,7 +347,7 @@ const animate = () => {
     control.enabled = true;
   }
 
-  updateObjTex(Obj);
+  updateObjTex();
 };
 export const setUpThree = () => {
   btnEl = document.getElementById("btn");
@@ -358,7 +358,7 @@ export const setUpThree = () => {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   scene = new THREE.Scene();
-  Obj = loadModel(scene);
+  loadModel();
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -376,7 +376,7 @@ export const setUpThree = () => {
   camera.position.setY(21);
   renderer.render(scene, camera);
   /*light here */
-  setUpLight(scene);
+  setUpLight();
   control = new OrbitControls(camera, renderer.domElement);
   pointer.x = 200000;
 
