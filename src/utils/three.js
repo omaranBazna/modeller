@@ -12,8 +12,8 @@ let renderer;
 let camera;
 let control;
 let raycaster;
-const btnEl = document.getElementById("btn");
-const canvas = document.getElementById("draw");
+let btnEl;
+let canvas;
 let ctx;
 let h;
 let w;
@@ -356,6 +356,8 @@ const animate = () => {
 };
 
 export const setUpThree = () => {
+  btnEl = document.getElementById("btn");
+  canvas = document.getElementById("draw");
   h = canvas.height;
   w = canvas.width;
   ctx = canvas.getContext("2d");
