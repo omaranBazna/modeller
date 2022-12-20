@@ -90,3 +90,6 @@ height:3px;
   background-color:rgb(109, 109, 109);
 
 }
+#draw{
+  display:none;
+}

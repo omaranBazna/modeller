@@ -1,5 +1,6 @@
 import { useEffect ,useState} from "react"
 import { scryRenderedComponentsWithType } from "react-dom/test-utils";
+import { HexColorPicker } from "react-colorful";
 
 import * as THREE from "three";
 import { GridHelper } from "three";
@@ -7,11 +8,12 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import MODEL from './models/CuteKitty.glb'
+import { regions } from "../utils/regions";
 export default function Design({user}){
  
-const [color,setColor]=useState("green")
+  const [color, setColor] = useState("#aabbcc");
+  let colorV="#aabbcc"
 const [tool,setTool]=useState("brush")
-
 
 
 
@@ -104,7 +106,7 @@ loader.load( MODEL, function (gltf) {
     
 
 
-    let radius=0.02;
+    let radius=0.05;
     renderer.setPixelRatio(window.devicePixelRatio);
     
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -279,12 +281,15 @@ scene.add(light8);
       }
         window.addEventListener("mousemove",onMouseMove)
         window.addEventListener("mousedown",()=>{
-          console.log("clicked")
+         
           mouseClicked=true
         })
         window.addEventListener("mouseup",()=>{
             mouseClicked=false
         })
+
+        document.getElementById("copy").getContext("2d").drawImage(document.getElementById("draw"),0,0);
+
     function animate() {
    
         requestAnimationFrame(animate);
@@ -300,6 +305,7 @@ scene.add(light8);
      
      
       renderer.render(scene, camera);
+      
 
           if(document.getElementById("toolEl").value=="brush"){
             control.enabled=false;
@@ -362,8 +368,9 @@ scene.add(light8);
         
         var canvas = document.getElementById("draw");
         var ctx = canvas.getContext("2d");
-        ctx.fillStyle =document.getElementById("selectEl").value;
 
+        ctx.fillStyle =document.getElementById("colorEl").getAttribute("data-color");
+          
         const h=canvas.height
         const w=canvas.width
        
@@ -377,14 +384,118 @@ scene.add(light8);
     
 
    
-   //   ctx.moveTo(xPos,yPos)
+   
 
        for(let i=1;i<36;i++){
          xPos=(minArr[i][0])*w
             yPos=h/2 - (minArr[i][1]-0.5)*h
            let d=Math.sqrt((minArr[i][0]-pos[0])*(minArr[i][0]-pos[0])+(minArr[i][1]-pos[1])*(minArr[i][1]-pos[1]))
           
-          if(d<0.1){
+          if(d<0.2){
+           ctx.arc(xPos, yPos,0, 0, 2 * Math.PI);
+          }
+       }
+           
+          
+       
+        ctx.fill();
+
+        document.getElementById("copy").getContext("2d").drawImage(document.getElementById("draw"),0,0);
+
+        }
+
+
+      
+
+
+
+
+      
+      }
+
+
+     }else{
+
+
+
+
+
+      raycaster.setFromCamera( pointer, camera );
+
+      const intersection = raycaster.intersectObject(Obj );
+     
+
+     if(intersection.length>0){
+
+
+        let min=intersection[0]
+        for(let el of intersection){
+           if(el.distance<min.distance){
+              min=el;
+           }
+         }
+         const pos=[min.uv.x,min.uv.y];
+
+ 
+      const minArr=[]
+     
+  
+      for(let i=0;i<36;i++){
+        const point_i=new THREE.Vector2(0,0);
+        point_i.x=pointer.x+radius*Math.cos(i/36*Math.PI*2);
+        point_i.y=pointer.y+radius*Math.sin(i/36*Math.PI*2)*2;
+
+        raycaster.setFromCamera( point_i, camera );
+
+        const intersection1 = raycaster.intersectObject(Obj );
+        
+          let min=intersection1[0]
+         for(let el of intersection1){
+            if(el.distance<min.distance){
+               min=el;
+            }
+          }
+         // console.log(min.uv)
+         if(min){
+        minArr.push([min.uv.x,min.uv.y])
+         }
+      }
+    
+        
+      
+
+       
+            
+
+         
+
+        
+        var canvas = document.getElementById("draw");
+        var ctx = canvas.getContext("2d");
+
+        ctx.fillStyle =document.getElementById("colorEl").getAttribute("data-color");
+          
+        const h=canvas.height
+        const w=canvas.width
+       
+       if(minArr[0]){
+        ctx.beginPath();
+    
+      //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
+       
+      let xPos=(minArr[0][0])*w
+      let yPos=h/2 - (minArr[0][1]-0.5)*h
+    
+    
+   
+  ctx.drawImage(document.getElementById("copy"),0,0);
+
+       for(let i=1;i<36;i++){
+         xPos=(minArr[i][0])*w
+            yPos=h/2 - (minArr[i][1]-0.5)*h
+           let d=Math.sqrt((minArr[i][0]-pos[0])*(minArr[i][0]-pos[0])+(minArr[i][1]-pos[1])*(minArr[i][1]-pos[1]))
+          
+          if(d<0.2){
            ctx.arc(xPos, yPos,0, 0, 2 * Math.PI);
           }
        }
@@ -394,32 +505,128 @@ scene.add(light8);
         ctx.fill();
 
         
-    }
+   
+
+        }
 
 
-        texture = new THREE.TextureLoader().load(document.querySelector("#draw").toDataURL("image/png"));
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(1, 1);
-            const new_material = new THREE.MeshStandardMaterial({
-              map: texture
-            });
-
-       Obj.material=new_material
+      
 
 
 
 
       
-        }
       }
+
+
+
+
+
+     }
+
+
     }else if(document.getElementById("toolEl").value=="rotate"){
    control.enabled=true;
-    }
-    }
+    }else if(document.getElementById("toolEl").value=="fill"){
+
+      
 
 
+
+
+
+
+
+
+      control.enabled=false;
+
+
+     
+
+
+      if(mouseClicked ){
   
+        raycaster.setFromCamera( pointer, camera );
+  
+        const intersection = raycaster.intersectObject(Obj );
+       
+  
+       if(intersection.length>0){
+  
+  
+          let min=intersection[0]
+          for(let el of intersection){
+             if(el.distance<min.distance){
+                min=el;
+             }
+           }
+           const pos=[min.uv.x,min.uv.y];
+  
+   
+      
+          
+        
+  
+         
+        
+          
+          var canvas = document.getElementById("draw");
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle =document.getElementById("colorEl").getAttribute("data-color");
+  
+          const h=canvas.height
+          const w=canvas.width
+         
+    
+      
+        //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
+         
+        let xPos=(pos[0])*w
+        let yPos=h/2 - (pos[1]-0.5)*h
+      
+       
+  
+          for(let region of regions){
+
+           if(xPos>=region[0] && yPos>=region[1] && xPos<=region[2] && yPos<=region[3]){
+            console.log(region);
+            console.log(xPos,yPos)
+          
+            ctx.fillRect(region[0],region[1],region[2]-region[0],region[3]-region[1])
+              ctx.fill();
+              break;
+           }
+          }
+        
+
+      }
+  
+  
+          
+  
+  
+  
+  
+        
+          }
+        
+
+
+
+    }
+    texture = new THREE.TextureLoader().load(document.querySelector("#draw").toDataURL("image/png"));
+          texture.wrapS = THREE.RepeatWrapping;
+          texture.wrapT = THREE.RepeatWrapping;
+          texture.repeat.set(1, 1);
+              const new_material = new THREE.MeshStandardMaterial({
+                map: texture
+              });
+  
+         Obj.material=new_material
+    }
+
+
+    
   
     animate();
     
@@ -432,16 +639,7 @@ scene.add(light8);
      <div className="design">
        <h1>design</h1> 
        <button id="btn">Clear</button>
-        <select id="selectEl" value={color} onChange={(e)=>{setColor(e.target.value)}}>
-         
-              <option value="green">Green</option>
-        <option value="red">Red </option>
-      
-        <option value="blue">Blue</option>
-
-        <option value="black">Black</option>
-        <option value="white">White</option>
-       </select>
+     
        <select id="toolEl" value={tool} onChange={(e)=>{setTool(e.target.value)}}>
 
        <option value="brush">Brush</option>
@@ -451,9 +649,10 @@ scene.add(light8);
        </select>
      
         <canvas id="bg" height="800" width="1200" />
+        <HexColorPicker id="colorEl" data-color={color} color={color} onChange={setColor} />;
       
         <canvas id="draw" height="1200" width="1200" />
-       
+        <canvas id="copy" height="1200" width="1200" />
      </div>
     )
 }
