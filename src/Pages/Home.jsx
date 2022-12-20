@@ -1,4 +1,5 @@
 import SignIn from "../Components/SingIn"
+
 export default function Home({user,setUser}){
 
 

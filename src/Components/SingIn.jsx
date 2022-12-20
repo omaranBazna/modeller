@@ -1,5 +1,7 @@
 import { signInF } from "../utils/firebase";
 import { signOutF } from "../utils/firebase";
+import GoogleButton from 'react-google-button'
+import { addToDataBase } from "../utils/firebase";
 export default function SignIn({user,setUser}){
    
   
@@ -29,7 +31,7 @@ const handleSignOut=async(e)=>{
         <form className="sign-form">
             
 
-           {!user && <button className="sign-in-btn" onClick={(e)=>{handleSignIn(e)}} type="submit" >LogIn</button>}
+           {!user && <GoogleButton onClick={(e)=>{handleSignIn(e)}}/>}
            {user && <button className="sign-out-btn"  onClick={(e)=>{handleSignOut(e)}} type="submit" >Sign Out</button>}
 
         </form>

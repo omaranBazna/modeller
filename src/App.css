@@ -108,6 +108,7 @@ height:3px;
   top:100px;
   left:20px;
   z-index:10;
+  box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
 }
 .tools{
   position: absolute;
@@ -115,9 +116,39 @@ height:3px;
   z-index:10;
   right:20px;
   display:flex;
-  width:200px;
+  width:20px;
+  height:200px;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  padding:20px;
+  background-color: white;
+  box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
+  border-radius:20px;
+
 }
 
 #copy{
+  display:none;
+}
+.tools img{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+}
+.iconI{
+
+  background-color: rgba(132, 129, 129, 0.314);
+  box-shadow: 2px 2px 2px 1px rgba(63, 63, 69, 0.391);
+  border-radius:50%;
+  
+}
+.iconI:hover{
+
+  background-color: rgba(255, 255, 255, 0.314);
+
+  
+}
+.toolEl{
   display:none;
 }

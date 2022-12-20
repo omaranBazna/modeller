@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,20 +20,40 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
+
+export const addToDataBase = async (user) => {
+  try {
+    const docRef = doc(db, "users", user.uid);
+
+    await setDoc(docRef, {
+      name: "test",
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const signInF = () =>
   signInWithPopup(auth, provider)
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
+
       const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
+
       return user;
       // ...
     })
+    .then((user) => {
+      return user;
+    })
     .catch((error) => {
+      console.log(error);
+      /*
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -40,6 +61,7 @@ export const signInF = () =>
       const email = error.customData.email;
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error);
+      */
       return null;
       // ...
     });
