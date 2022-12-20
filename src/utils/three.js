@@ -4,11 +4,21 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
 
+let radius = 0.05;
+let mouseClicked = false;
+let Obj;
+const btnEl = document.getElementById("btn");
+const canvas = document.getElementById("draw");
+const ctx = canvas.getContext("2d");
+const h = canvas.height;
+const w = canvas.width;
+
+const pointer = new THREE.Vector2();
+
 const setUpLight = (scene) => {
   const light = new THREE.PointLight(0xffffff);
   light.position.set(10, 20, 10);
   light.intensity = 0.7;
-  const sphereSize = 1;
   scene.add(light);
   const light2 = new THREE.PointLight(0xffffff);
   light2.position.set(-10, 20, 10);
@@ -39,7 +49,6 @@ const setUpLight = (scene) => {
   light8.intensity = 0.4;
   scene.add(light8);
 };
-
 const updateObjTex = (Obj) => {
   let texture = new THREE.TextureLoader().load(
     document.querySelector("#draw").toDataURL("image/png")
@@ -52,7 +61,6 @@ const updateObjTex = (Obj) => {
   });
   Obj.material = new_material;
 };
-
 const calculateMinArr = (
   raycaster,
   pointer,
@@ -71,7 +79,8 @@ const calculateMinArr = (
         min = el;
       }
     }
-    const pos = [min.uv.x, min.uv.y];
+    pos[0] = min.uv.x;
+    pos[1] = min.uv.y;
 
     for (let i = 0; i < 36; i++) {
       const point_i = new THREE.Vector2(0, 0);
@@ -101,25 +110,9 @@ const updateCopy = () => {
     .getContext("2d")
     .drawImage(document.getElementById("draw"), 0, 0);
 };
-
-export const setUpThree = () => {
-  let mouseClicked = false;
-  const btnEl = document.getElementById("btn");
-  var canvas = document.getElementById("draw");
-  var context = canvas.getContext("2d");
-  btnEl.addEventListener("click", () => {
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    updateCopy();
-    updateObjTex(Obj);
-  });
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  const scene = new THREE.Scene();
+const loadModel = (scene) => {
   let Obj;
   const loader = new GLTFLoader();
-
   loader.load(
     MODEL,
     function (gltf) {
@@ -136,6 +129,7 @@ export const setUpThree = () => {
           scene.add(Obj);
         }
       }
+      return Obj;
     },
     () => {
       console.log("loading");
@@ -144,23 +138,19 @@ export const setUpThree = () => {
       console.log(e);
     }
   );
+};
 
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.01,
-    1000
-  );
-  const renderer = new THREE.WebGLRenderer({
-    canvas: document.querySelector("#bg"),
-    alpha: true,
+const setUpListener = () => {
+  btnEl.addEventListener("click", () => {
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    updateCopy();
+    updateObjTex(Obj);
   });
-
-  let radius = 0.05;
   window.addEventListener("mousewheel", (e) => {
     e.preventDefault();
     if (
-      document.querySelector(".toolEl").getAttribute("data-tool") == "brush"
+      document.querySelector(".toolEl").getAttribute("data-tool") === "brush"
     ) {
       if (e.deltaY < 0 && radius < 0.5) {
         radius += 0.001;
@@ -171,21 +161,6 @@ export const setUpThree = () => {
       }
     }
   });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.position.setX(-5);
-  camera.position.setZ(25);
-  camera.position.setY(21);
-
-  renderer.render(scene, camera);
-
-  /*light here */
-  setUpLight(scene);
-
-  const control = new OrbitControls(camera, renderer.domElement);
-  const pointer = new THREE.Vector2();
-  pointer.x = 200000;
-  const raycaster = new THREE.Raycaster();
 
   var onMouseMove = (event) => {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -198,6 +173,38 @@ export const setUpThree = () => {
   window.addEventListener("mouseup", () => {
     mouseClicked = false;
   });
+};
+
+export const setUpThree = () => {
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const scene = new THREE.Scene();
+  Obj = loadModel(scene);
+
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.01,
+    1000
+  );
+  const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector("#bg"),
+    alpha: true,
+  });
+
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.position.setX(-5);
+  camera.position.setZ(25);
+  camera.position.setY(21);
+  renderer.render(scene, camera);
+  /*light here */
+  setUpLight(scene);
+  const control = new OrbitControls(camera, renderer.domElement);
+  pointer.x = 200000;
+  const raycaster = new THREE.Raycaster();
+  setUpListener();
 
   function animate() {
     requestAnimationFrame(animate);
@@ -210,23 +217,18 @@ export const setUpThree = () => {
     renderer.render(scene, camera);
     const option = document.querySelector(".toolEl").getAttribute("data-tool");
 
-    if (option == "brush") {
+    if (option === "brush") {
       control.enabled = false;
 
       if (mouseClicked) {
-        /*minArr */
         const minArr = [];
         const pos = [0, 0];
         calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
 
-        var canvas = document.getElementById("draw");
         var ctx = canvas.getContext("2d");
         ctx.fillStyle = document
           .getElementById("colorEl")
           .getAttribute("data-color");
-
-        const h = canvas.height;
-        const w = canvas.width;
 
         if (minArr[0]) {
           ctx.beginPath();
@@ -248,21 +250,15 @@ export const setUpThree = () => {
 
           ctx.fill();
         }
+        updateCopy();
       } else {
         /*minArr */
         const minArr = [];
         const pos = [0, 0];
         calculateMinArr(raycaster, pointer, camera, minArr, Obj, radius, pos);
-
-        var canvas = document.getElementById("draw");
-        var ctx = canvas.getContext("2d");
-
         ctx.fillStyle = document
           .getElementById("colorEl")
           .getAttribute("data-color");
-
-        const h = canvas.height;
-        const w = canvas.width;
 
         if (minArr[0]) {
           ctx.beginPath();
@@ -285,7 +281,7 @@ export const setUpThree = () => {
           ctx.fill();
         }
       }
-    } else if (option == "fill") {
+    } else if (option === "fill") {
       control.enabled = false;
 
       if (mouseClicked) {
@@ -302,14 +298,9 @@ export const setUpThree = () => {
           }
           const pos = [min.uv.x, min.uv.y];
 
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
           ctx.fillStyle = document
             .getElementById("colorEl")
             .getAttribute("data-color");
-
-          const h = canvas.height;
-          const w = canvas.width;
 
           //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
 
@@ -337,6 +328,7 @@ export const setUpThree = () => {
             }
           }
         }
+        updateCopy();
       } else {
         raycaster.setFromCamera(pointer, camera);
 
@@ -351,15 +343,12 @@ export const setUpThree = () => {
           }
           const pos = [min.uv.x, min.uv.y];
 
-          var canvas = document.getElementById("draw");
-          var ctx = canvas.getContext("2d");
           ctx.fillStyle = document
             .getElementById("colorEl")
             .getAttribute("data-color");
 
-          const h = canvas.height;
-          const w = canvas.width;
           ctx.drawImage(document.getElementById("copy"), 0, 0);
+
           let xPos = pos[0] * w;
           let yPos = h / 2 - (pos[1] - 0.5) * h;
 
@@ -385,7 +374,7 @@ export const setUpThree = () => {
           }
         }
       }
-    } else if (option == "rotate") {
+    } else if (option === "rotate") {
       control.enabled = true;
     }
 
