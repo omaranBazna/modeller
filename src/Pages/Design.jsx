@@ -104,9 +104,22 @@ loader.load( MODEL, function (gltf) {
       alpha: true,
     });
     
-
+  
 
     let radius=0.05;
+    window.addEventListener("mousewheel",(e)=>{
+      e.preventDefault();
+      if(document.getElementById("toolEl").value=="brush"){
+     if(e.deltaY<0 && radius<0.5){
+      radius+=0.001;
+      console.log(radius)
+     }else if(e.deltaY>0 && radius>0.005){
+      radius-=0.001;
+      console.log(radius)
+     }
+    
+    }
+    })
     renderer.setPixelRatio(window.devicePixelRatio);
     
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -274,7 +287,7 @@ scene.add(light8);
 
     var onMouseMove=(event)=>{
        pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      pointer.y = - ( (event.clientY-153) / window.innerHeight ) * 2 + 1 ;
+      pointer.y = - ( (event.clientY) / window.innerHeight ) * 2 + 1 ;
      
     
        
@@ -291,7 +304,7 @@ scene.add(light8);
         document.getElementById("copy").getContext("2d").drawImage(document.getElementById("draw"),0,0);
 
     function animate() {
-   
+
         requestAnimationFrame(animate);
     
       
@@ -596,7 +609,10 @@ scene.add(light8);
               ctx.fill();
               break;
            }
-          }
+          } 
+          
+        document.getElementById("copy").getContext("2d").drawImage(document.getElementById("draw"),0,0);
+
         
 
       }
@@ -608,6 +624,68 @@ scene.add(light8);
   
   
         
+          }else{
+
+
+
+            raycaster.setFromCamera( pointer, camera );
+  
+            const intersection = raycaster.intersectObject(Obj );
+           
+      
+           if(intersection.length>0){
+      
+      
+              let min=intersection[0]
+              for(let el of intersection){
+                 if(el.distance<min.distance){
+                    min=el;
+                 }
+               }
+               const pos=[min.uv.x,min.uv.y];
+      
+       
+          
+              
+            
+      
+             
+            
+              
+              var canvas = document.getElementById("draw");
+              var ctx = canvas.getContext("2d");
+              ctx.fillStyle =document.getElementById("colorEl").getAttribute("data-color");
+      
+              const h=canvas.height
+              const w=canvas.width
+             
+        
+              ctx.drawImage(document.getElementById("copy"),0,0);
+            //  ctx.arc((min.uv.x)*w-12.5, h/2 - (min.uv.y-0.5)*h-12.5,25, 0, 2 * Math.PI);
+             
+            let xPos=(pos[0])*w
+            let yPos=h/2 - (pos[1]-0.5)*h
+          
+           
+      
+              for(let region of regions){
+    
+               if(xPos>=region[0] && yPos>=region[1] && xPos<=region[2] && yPos<=region[3]){
+                console.log(region);
+                console.log(xPos,yPos)
+              
+                ctx.fillRect(region[0],region[1],region[2]-region[0],region[3]-region[1])
+                  ctx.fill();
+                  break;
+               }
+              }
+            
+    
+          }
+      
+      
+              
+
           }
         
 
@@ -637,7 +715,9 @@ scene.add(light8);
     return (
 
      <div className="design">
-       <h1>design</h1> 
+
+
+<div className="tools">
        <button id="btn">Clear</button>
      
        <select id="toolEl" value={tool} onChange={(e)=>{setTool(e.target.value)}}>
@@ -647,9 +727,11 @@ scene.add(light8);
 <option value="rotate">Rotate</option>
 <option value="fill">Fill</option>
        </select>
-     
-        <canvas id="bg" height="800" width="1200" />
-        <HexColorPicker id="colorEl" data-color={color} color={color} onChange={setColor} />;
+       
+       </div>
+      <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor} />
+        <canvas id="bg"  width="1200" />
+       
       
         <canvas id="draw" height="1200" width="1200" />
         <canvas id="copy" height="1200" width="1200" />
