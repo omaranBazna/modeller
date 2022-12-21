@@ -30,11 +30,15 @@ export const setUpThree = (url) => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (url) {
-    const img = document.getElementById("myimg");
-    img.setAttribute("src", url);
-    img.onload = () => {
+    var img = new Image();
+
+    img.setAttribute("crossOrigin", "anonymous");
+    img.onload = function () {
       document.getElementById("copy").getContext("2d").drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0);
     };
+
+    img.src = url;
   }
   const pointer = new THREE.Vector2();
   const setUpLight = () => {
@@ -72,7 +76,7 @@ export const setUpThree = (url) => {
     scene.add(light8);
   };
   const updateObjTex = () => {
-    let texture = new THREE.TextureLoader().load(url);
+    let texture = new THREE.TextureLoader().load(canvas.toDataURL("image/png"));
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(1, 1);
@@ -183,7 +187,7 @@ export const setUpThree = (url) => {
   const animate = () => {
     setTimeout(() => {
       requestAnimationFrame(animate);
-    }, 150);
+    }, 75);
 
     if (!Obj) {
       return;
