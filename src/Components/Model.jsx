@@ -1,4 +1,4 @@
-export default  Model=({name})=>{
+export default function Model({name}){
 
 return <div className="model"> 
  

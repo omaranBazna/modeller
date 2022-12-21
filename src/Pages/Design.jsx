@@ -3,7 +3,7 @@ import { HexColorPicker } from "react-colorful";
 import { useNavigate } from "react-router-dom";
 import { setUpThree } from "../utils/three";
 import { saveToStorage } from "../utils/firebase";
-export default function Design({user,setUser}){
+export default function Design({user,setUser,selected}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
   const [tool,setTool]=useState("rotate")
@@ -35,6 +35,10 @@ export default function Design({user,setUser}){
    }
    }else{
     navigator("/")
+   }
+
+   if(selected){
+    
    }
    setUpThree();
     },[])

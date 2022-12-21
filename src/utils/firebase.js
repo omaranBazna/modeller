@@ -9,7 +9,13 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { generateID } from "./functions";
 // Your web app's Firebase configuration
@@ -47,6 +53,18 @@ export const saveToStorage = async (file, user, name) => {
     console.log(e);
     return null;
   }
+};
+
+export const getAllDocs = async (user) => {
+  const querySnapshot = await getDocs(
+    collection(db, `users/${user.uid}/models`)
+  );
+  const data = [];
+  querySnapshot.forEach((doc) => {
+    data.push(doc.data());
+  });
+
+  return data;
 };
 
 export const addToDataBase = async (user) => {
