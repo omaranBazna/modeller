@@ -1,19 +1,16 @@
 import { useEffect ,useState} from "react"
-
 import { HexColorPicker } from "react-colorful";
-
-
 import { useNavigate } from "react-router-dom";
-import{singInWithToken} from "../utils/firebase"
 import { setUpThree } from "../utils/three";
 export default function Design({user,setUser}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
- 
-const [tool,setTool]=useState("rotate")
+  const [tool,setTool]=useState("rotate")
 
 
+  const handleSave=()=>{
 
+  }
 
 
     useEffect(()=>{
@@ -56,8 +53,12 @@ const [tool,setTool]=useState("rotate")
     </div>
 
     <div id="btn" className="iconI">
-  <img id="btn" src="https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/eraser.png" />
+  <img  src="https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/eraser.png" />
     </div> 
+    <div onClick={()=>handleSave()} className="IconI">
+
+      <img src="https://cdn-icons-png.flaticon.com/512/174/174314.png" />
+    </div>
     <div className="toolEl" data-tool={tool}></div>
     
 
