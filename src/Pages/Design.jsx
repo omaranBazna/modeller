@@ -2,6 +2,7 @@ import { useEffect ,useState} from "react"
 import { HexColorPicker } from "react-colorful";
 import { useNavigate } from "react-router-dom";
 import { setUpThree } from "../utils/three";
+import { saveToStorage } from "../utils/firebase";
 export default function Design({user,setUser}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
@@ -9,7 +10,7 @@ export default function Design({user,setUser}){
 
 
   const handleSave=()=>{
-
+     saveToStorage(  document.querySelector("#draw").toDataURL("image/png"))
   }
 
 
