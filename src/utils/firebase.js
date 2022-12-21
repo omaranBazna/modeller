@@ -11,7 +11,7 @@ import {
 } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-
+import { generateID } from "./functions";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCGL98TuYt6jAhUoIuMHK9Cb8GPONRanMI",
@@ -29,17 +29,28 @@ const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const saveToStorage = (file) => {
-  const storageRef = ref(storage, "models");
+export const saveToStorage = async (file, user) => {
+  try {
+    const id = generateID();
+    const docRef = doc(db, `users/${user.uid}/models/${id}`);
 
-  return uploadBytes(storageRef, file).then((snapshot) => {
-    console.log("Uploaded a blob or file!");
-  });
+    await setDoc(docRef, {
+      name: id,
+    });
+
+    const storageRef = ref(storage, `models/${id}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    console.log(snapshot);
+    return snapshot;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
 
 export const addToDataBase = async (user) => {
   try {
-    const docRef = doc(db, "users", user.uid);
+    const docRef = doc(db, "users/models", user.uid);
 
     await setDoc(docRef, {
       name: "test",

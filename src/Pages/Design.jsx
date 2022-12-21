@@ -10,7 +10,14 @@ export default function Design({user,setUser}){
 
 
   const handleSave=()=>{
-     saveToStorage(  document.querySelector("#draw").toDataURL("image/png"))
+   
+   
+    document.querySelector("#draw").toBlob(function(blob){
+   
+      
+      saveToStorage( blob,user)
+    }); 
+     
   }
 
 
