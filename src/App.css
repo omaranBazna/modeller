@@ -1,7 +1,7 @@
 /*Set up the styling */
 
 .App {
-
+  overflow: hidden;
   text-align: center;
   margin:0;
   padding:0;
