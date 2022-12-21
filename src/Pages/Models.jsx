@@ -27,12 +27,14 @@ getAllDocs(user).then(data=>{
 })
   
 
-const openModel=(id)=>{
-setSelected(id)
-navigator("/design")
-}
+
 
   },[])
+
+  const openModel=(id)=>{
+    setSelected(id)
+    navigator("/design")
+    }
     return (
 
      <div className="model">

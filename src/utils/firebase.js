@@ -16,7 +16,7 @@ import {
   setDoc,
   getDocs,
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { generateID } from "./functions";
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -53,6 +53,26 @@ export const saveToStorage = async (file, user, name) => {
     console.log(e);
     return null;
   }
+};
+
+export const downloadModal = async (ref) => {
+  return getDownloadURL(ref(storage, `models/${ref}`))
+    .then((url) => {
+      // `url` is the download URL for 'images/stars.jpg'
+
+      // This can be downloaded directly:
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = "blob";
+      xhr.onload = (event) => {
+        const blob = xhr.response;
+        return blob;
+      };
+      xhr.open("GET", url);
+      xhr.send();
+    })
+    .catch((error) => {
+      // Handle any errors
+    });
 };
 
 export const getAllDocs = async (user) => {
