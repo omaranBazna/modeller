@@ -10,6 +10,7 @@ import {
   browserSessionPersistence,
 } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,8 +25,17 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
+
+export const saveToStorage = (file) => {
+  const storageRef = ref(storage, "models");
+
+  return uploadBytes(storageRef, file).then((snapshot) => {
+    console.log("Uploaded a blob or file!");
+  });
+};
 
 export const addToDataBase = async (user) => {
   try {
