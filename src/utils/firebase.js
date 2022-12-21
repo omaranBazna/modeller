@@ -29,13 +29,14 @@ const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const saveToStorage = async (file, user) => {
+export const saveToStorage = async (file, user, name) => {
   try {
     const id = generateID();
     const docRef = doc(db, `users/${user.uid}/models/${id}`);
 
     await setDoc(docRef, {
-      name: id,
+      name: name,
+      ref: id,
     });
 
     const storageRef = ref(storage, `models/${id}`);

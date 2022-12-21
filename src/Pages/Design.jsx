@@ -7,7 +7,7 @@ export default function Design({user,setUser}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
   const [tool,setTool]=useState("rotate")
-
+  const [name,setName]=useState("");
 
   const handleSave=()=>{
    
@@ -15,7 +15,7 @@ export default function Design({user,setUser}){
     document.querySelector("#draw").toBlob(function(blob){
    
       
-      saveToStorage( blob,user)
+      saveToStorage( blob,user,name)
     }); 
      
   }
@@ -43,6 +43,10 @@ export default function Design({user,setUser}){
      <div className="design">
 
 
+
+<div className="model-data">
+  <input value={name} onChange={(e)=>{setName(e.target.value)}} placeholder="The name of this model ..."  />
+</div>
 <div className="tools">
   
     <div className="iconI" style={{background:tool=="brush"?"#eaeaaa":"white"}}  onClick={()=>{setTool("brush")}} >
