@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
+import Shadow from "../textures/shadow.png";
 export const setUpThree = (url) => {
   let radius = 0.05;
   let mouseClicked = false;
@@ -125,6 +126,32 @@ export const setUpThree = (url) => {
       .getElementById("copy")
       .getContext("2d")
       .drawImage(document.getElementById("draw"), 0, 0);
+  };
+
+  const loadShadow = () => {
+    const geometry = new THREE.PlaneGeometry(14, 14);
+
+    const loader = new THREE.TextureLoader();
+
+    const texture2 = loader.load(Shadow);
+
+    texture2.wrapS = THREE.RepeatWrapping;
+    texture2.wrapT = THREE.RepeatWrapping;
+    texture2.repeat.set(1, 1);
+    const new_material = new THREE.MeshStandardMaterial({
+      map: texture2,
+
+      transparent: true,
+    });
+
+    const plane = new THREE.Mesh(geometry, new_material);
+    plane.rotation.x = -Math.PI / 2;
+    plane.rotation.y = 0;
+    plane.rotation.z = 0;
+    plane.position.y = -0.1;
+    plane.position.z = -0.7;
+    plane.position.x = -0.7;
+    scene.add(plane);
   };
   const loadModel = () => {
     const loader = new GLTFLoader();
@@ -367,6 +394,8 @@ export const setUpThree = (url) => {
   };
 
   scene = new THREE.Scene();
+
+  loadShadow();
   loadModel();
 
   camera = new THREE.PerspectiveCamera(

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setUpThree } from "../utils/three";
 import { saveToStorage } from "../utils/firebase";
 import { downloadModal } from "../utils/firebase";
+
 export default function Design({user,setUser,selected}){
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
@@ -93,7 +94,7 @@ export default function Design({user,setUser,selected}){
       
         <canvas id="draw" height="1200" width="1200" />
         <canvas id="copy" height="1200" width="1200" />
-   
+  
      </div>
     )
 }
