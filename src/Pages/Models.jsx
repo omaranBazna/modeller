@@ -18,13 +18,14 @@ const navigator=useNavigate();
   navigator("/")
   
  }
+ getAllDocs(userf).then(data=>{
+  setModels(data)
+})
  }else{
   navigator("/")
  }
 
-getAllDocs(user).then(data=>{
-  setModels(data)
-})
+
   
 
 
@@ -39,9 +40,9 @@ getAllDocs(user).then(data=>{
 
      <div className="model">
        <h1>Model</h1>
-         {models.map((item)=>{
+         {models.map((item,index)=>{
           return (
-          <div onClick={()=>{openModel(item.ref)}}>
+          <div key={index} onClick={()=>{openModel(item.ref)}}>
           <Model name={item.name}></Model>
           </div>)
          })}

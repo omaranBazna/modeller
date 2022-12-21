@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
-export const setUpThree = () => {
+export const setUpThree = (url) => {
   let radius = 0.05;
   let mouseClicked = false;
   let Obj;
@@ -29,6 +29,13 @@ export const setUpThree = () => {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  if (url) {
+    const img = document.getElementById("myimg");
+    img.setAttribute("src", url);
+    img.onload = () => {
+      document.getElementById("copy").getContext("2d").drawImage(img, 0, 0);
+    };
+  }
   const pointer = new THREE.Vector2();
   const setUpLight = () => {
     const light = new THREE.PointLight(0xffffff);
@@ -65,9 +72,7 @@ export const setUpThree = () => {
     scene.add(light8);
   };
   const updateObjTex = () => {
-    let texture = new THREE.TextureLoader().load(
-      document.querySelector("#draw").toDataURL("image/png")
-    );
+    let texture = new THREE.TextureLoader().load(url);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(1, 1);
@@ -186,6 +191,9 @@ export const setUpThree = () => {
     Obj.rotation.y = 120;
 
     renderer.render(scene, camera);
+    if (document.querySelector(".toolEl") == undefined) {
+      return;
+    }
     const option = document.querySelector(".toolEl").getAttribute("data-tool");
 
     if (option === "brush") {
