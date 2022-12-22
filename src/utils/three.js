@@ -2,7 +2,7 @@ import { isRouteErrorResponse } from "react-router-dom";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import MODEL from "../models/CuteKitty.glb";
+import MODEL from "../models/food.glb";
 import { regions } from "./regions";
 import Shadow from "../textures/shadow.png";
 export const setUpThree = (url) => {
