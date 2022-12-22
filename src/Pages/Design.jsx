@@ -5,8 +5,27 @@ import { setUpThree } from "../utils/three";
 import { saveToStorage } from "../utils/firebase";
 import { downloadModal } from "../utils/firebase";
 import Popup from "../Components/Popup";
-
+import { useSpring } from "@react-spring/web";
 export default function Design({user,setUser,selected}){
+
+  const [springs, api] = useSpring({
+    from: { y: -10 ,  opacity:0}
+  })
+
+
+  const handleAnimation = () => {
+    api.start({
+      from: { y: -10 ,  opacity:0},
+    to:async (next, cancel) => {
+    await next({ y: 60 ,  opacity:0.8})
+    var start = new Date().getTime();
+    while (new Date().getTime() < start +700);
+    await next({ y: -60 ,  opacity:0})
+
+  }
+    })
+  }
+
   const navigator=useNavigate();
   const [color, setColor] = useState("#aabbcc");
   const [tool,setTool]=useState("rotate")

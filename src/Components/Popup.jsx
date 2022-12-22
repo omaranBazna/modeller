@@ -9,15 +9,12 @@ export default function Popup({message}){
     const springs = useSpring({
         from: { y: -10 ,  opacity:0},
         to:async (next, cancel) => {
-        await next({ y: -60 ,  opacity:0})
         await next({ y: 60 ,  opacity:0.8})
         var start = new Date().getTime();
-        while (new Date().getTime() < start +500);
+        while (new Date().getTime() < start +700);
         await next({ y: -60 ,  opacity:0})
 
-      },
-       
-        delay:200
+      }
       })
     
 
@@ -31,5 +28,8 @@ export default function Popup({message}){
           zIndex:999,
           ...springs,
         }}
-      />)
+      >
+
+        model saved to the data base
+      </animated.div>)
 }
