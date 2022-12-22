@@ -55,7 +55,7 @@ export const saveToStorage = async (file, user, name) => {
   }
 };
 
-export const downloadModal = async (modelRef) => {
+export const downloadModal = async (user, modelRef) => {
   return getDownloadURL(
     ref(storage, `collections/${user.uid}/${modelRef}`)
   ).catch((error) => {

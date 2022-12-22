@@ -81,7 +81,7 @@ export default function Design({user,setUser,selected}){
    }
 
    if(selected){
-    downloadModal(selected).then(url=>{
+    downloadModal(user,selected).then(url=>{
       
     setUpThree(url)
 
