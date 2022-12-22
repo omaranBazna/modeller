@@ -21,6 +21,6 @@ export default function Popup({springs,name}){
         }}
       >
 
-     <p>Model {name} has been successfully saved 😊<p/>
+     <p>Model {name} has been successfully saved 😊</p>
       </animated.div>)
 }
