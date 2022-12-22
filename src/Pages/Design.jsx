@@ -77,7 +77,7 @@ export default function Design({user,setUser,selected}){
 
      <div className="design">
 
-<Popup />
+<Popup springs={springs} />
 {/*
 <div className="model-data">
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />

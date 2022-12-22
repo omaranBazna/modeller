@@ -4,18 +4,9 @@ import { calculateNewValue } from '@testing-library/user-event/dist/utils'
 import { SkeletonHelper } from 'three'
 
 
-export default function Popup({message}){
+export default function Popup({springs}){
 
-    const springs = useSpring({
-        from: { y: -10 ,  opacity:0},
-        to:async (next, cancel) => {
-        await next({ y: 60 ,  opacity:0.8})
-        var start = new Date().getTime();
-        while (new Date().getTime() < start +700);
-        await next({ y: -60 ,  opacity:0})
 
-      }
-      })
     
 
     return (<animated.div className="popup"
