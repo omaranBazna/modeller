@@ -45,7 +45,7 @@ export const saveToStorage = async (file, user, name) => {
       ref: id,
     });
 
-    const storageRef = ref(storage, `models/${id}`);
+    const storageRef = ref(storage, `collections/${user.uid}/${id}`);
     const snapshot = await uploadBytes(storageRef, file);
     console.log(snapshot);
     return snapshot;
@@ -56,7 +56,9 @@ export const saveToStorage = async (file, user, name) => {
 };
 
 export const downloadModal = async (modelRef) => {
-  return getDownloadURL(ref(storage, `models/${modelRef}`)).catch((error) => {
+  return getDownloadURL(
+    ref(storage, `collections/${user.uid}/${modelRef}`)
+  ).catch((error) => {
     // Handle any errors
   });
 };
