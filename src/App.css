@@ -93,7 +93,7 @@ height:3px;
 }
 
 #bg{
-  background-image:linear-gradient(rgb(231, 249, 255),rgb(108, 148, 223));
+  background-image:linear-gradient(rgb(230, 82, 37),rgb(237, 133, 48),rgb(255, 191, 53) 50%,rgb(255, 164, 53) 80%,rgb(243, 157, 52));
   position: absolute;
   top:0px;
   left:0px;
