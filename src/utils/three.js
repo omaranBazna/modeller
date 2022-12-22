@@ -321,18 +321,18 @@ export const setUpThree = (url) => {
           let xPos = pos[0] * w;
           let yPos = h / 2 - (pos[1] - 0.5) * h;
 
-          for (let region of regions) {
+          for (let i = 0; i < regions.length; i++) {
             if (
-              xPos >= region[0] &&
-              yPos >= region[1] &&
-              xPos <= region[2] &&
-              yPos <= region[3]
+              xPos >= regions[i] * 1200 &&
+              yPos >= regions[i + 1] * 1200 &&
+              xPos <= regions[i + 2] * 1200 &&
+              yPos <= regions[i + 3] * 1200
             ) {
               ctx.fillRect(
-                region[0],
-                region[1],
-                region[2] - region[0],
-                region[3] - region[1]
+                regions[i + 0] * 1200,
+                regions[i + 1] * 1200,
+                (regions[i + 2] - regions[i + 0]) * 1200,
+                (regions[i + 3] - regions[i + 1]) * 1200
               );
               ctx.fill();
               break;
