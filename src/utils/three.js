@@ -212,9 +212,7 @@ export const setUpThree = (url) => {
     });
   };
   const animate = () => {
-    setTimeout(() => {
-      requestAnimationFrame(animate);
-    }, 75);
+    requestAnimationFrame(animate);
 
     if (!Obj) {
       return;
