@@ -8,9 +8,9 @@ import Popup from "../Components/Popup";
 import { useSpring } from "@react-spring/web";
 export default function Design({user,setUser,selected}){
 
-  const [springs, api] = useSpring({
-    from: { y: -10 ,  opacity:0}
-  })
+  const [springs, api] = useSpring(()=>({
+    from: { y: -100 ,  opacity:0}
+  }))
 
 
   const handleAnimation = () => {
@@ -37,7 +37,11 @@ export default function Design({user,setUser,selected}){
     document.querySelector("#draw").toBlob(function(blob){
    
       
-      saveToStorage( blob,user,name)
+      saveToStorage( blob,user,name).then((result)=>{
+       handleAnimation();
+      }).catch(e=>{
+      
+      })
     }); 
      
   }
@@ -65,11 +69,11 @@ export default function Design({user,setUser,selected}){
    if(selected){
     downloadModal(selected).then(url=>{
       
-    //  setUpThree(url)
+    setUpThree(url)
 
     })
    }else{
-      // setUpThree();
+       setUpThree();
    }
 
     },[])
@@ -77,8 +81,9 @@ export default function Design({user,setUser,selected}){
 
      <div className="design">
 
-<Popup springs={springs} />
-{/*
+<Popup name={name} springs={springs} />
+
+
 <div className="model-data">
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
 
@@ -117,7 +122,7 @@ export default function Design({user,setUser,selected}){
       
         <canvas id="draw" height="1200" width="1200" />
         <canvas id="copy" height="1200" width="1200" />
-    */}
+   
      </div>
     )
 }

@@ -4,7 +4,7 @@ import { calculateNewValue } from '@testing-library/user-event/dist/utils'
 import { SkeletonHelper } from 'three'
 
 
-export default function Popup({springs}){
+export default function Popup({springs,name}){
 
 
     
@@ -21,6 +21,6 @@ export default function Popup({springs}){
         }}
       >
 
-        model saved to the data base
+     <p>Model {name} has been successfully saved 😊<p/>
       </animated.div>)
 }
