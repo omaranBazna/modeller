@@ -21,7 +21,10 @@ export default function Design({user,setUser,selected}){
     }); 
      
   }
-
+  const handleEdit=()=>{
+    setEditable(false);
+   document.getElementById("modelName").select().focus();
+  }
 
     useEffect(()=>{
 
@@ -57,9 +60,9 @@ export default function Design({user,setUser,selected}){
 
 
 <div className="model-data">
-  <input readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} placeholder="The name of this model ..."  />
+  <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} placeholder="The name of this model ..."  />
 
- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
+ <img onClick={handleEdit} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
  <img src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png" />
 </div>
 <div className="tools">
