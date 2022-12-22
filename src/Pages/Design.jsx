@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setUpThree } from "../utils/three";
 import { saveToStorage } from "../utils/firebase";
 import { downloadModal } from "../utils/firebase";
+import Popup from "../Components/Popup";
 
 export default function Design({user,setUser,selected}){
   const navigator=useNavigate();
@@ -45,11 +46,11 @@ export default function Design({user,setUser,selected}){
    if(selected){
     downloadModal(selected).then(url=>{
       
-      setUpThree(url)
+    //  setUpThree(url)
 
     })
    }else{
-       setUpThree();
+      // setUpThree();
    }
 
     },[])
@@ -57,8 +58,8 @@ export default function Design({user,setUser,selected}){
 
      <div className="design">
 
-
-
+<Popup />
+{/*
 <div className="model-data">
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
 
@@ -97,7 +98,7 @@ export default function Design({user,setUser,selected}){
       
         <canvas id="draw" height="1200" width="1200" />
         <canvas id="copy" height="1200" width="1200" />
-  
+    */}
      </div>
     )
 }

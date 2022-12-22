@@ -21,7 +21,7 @@ nav{
   top:0;
   left:0;
   width:100%;
-  z-index:1000;
+  z-index:100;
   display:flex;
   align-items: center;
   justify-content: space-between;
@@ -191,20 +191,8 @@ height:3px;
 }
 
 .popup{
-position:absolute;
-top:-20px;
-height:30px;
-width:200px;
-background-color: rgba(255, 251, 0, 0.455);
-border-radius:10px;
-animation:popupanimation;
-animation-duration: 1s;
-}
-@keyframes popupanimation {
-  0%{
-    top:-20px;
-  }
-  100%{
-    top:20px;
-  }
+  margin:0;
+  padding:0;
+left:calc(50% - 125px);
+
 }
