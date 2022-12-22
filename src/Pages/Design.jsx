@@ -11,6 +11,7 @@ export default function Design({user,setUser,selected}){
   const [springs, api] = useSpring(()=>({
     from: { y: -100 ,  opacity:0}
   }))
+   const [download,setDownload]=useState(false);
 
 
   const handleAnimation = () => {
@@ -18,9 +19,22 @@ export default function Design({user,setUser,selected}){
       from: { y: -10 ,  opacity:0},
     to:async (next, cancel) => {
     await next({ y: 60 ,  opacity:1})
+    
+    await next({ y: 60.001 ,  opacity:1})
+    
+    await next({ y: 60 ,  opacity:1})
+    
+    await next({ y: 60.001 ,  opacity:1})
+ 
+   
+    
+    
     await next({ y: -60 ,  opacity:0})
 
-  }
+  },
+  
+
+  
     })
   }
 
@@ -31,17 +45,19 @@ export default function Design({user,setUser,selected}){
   const [editable,setEditable]=useState(false);
   const handleSave=()=>{
    
-   
+   if(download==false){
+    setDownload(true);
     document.querySelector("#draw").toBlob(function(blob){
-   
+     
       
       saveToStorage( blob,user,name).then((result)=>{
        handleAnimation();
+       setDownload(false);
       }).catch(e=>{
       
       })
     }); 
-     
+  }
   }
   const handleEdit=()=>{
     setEditable(false);
@@ -86,7 +102,10 @@ export default function Design({user,setUser,selected}){
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
 
  <img onClick={handleEdit} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
- <img onClick={()=>handleSave()}  src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png" />
+ <img  onClick={()=>handleSave()} 
+  src={download?"https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif":"https://findicons.com/files/icons/2315/default_icon/256/save_inv.png"}
+  
+  />
 </div>
 <div className="tools">
   
