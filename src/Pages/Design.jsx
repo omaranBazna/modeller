@@ -17,9 +17,7 @@ export default function Design({user,setUser,selected}){
     api.start({
       from: { y: -10 ,  opacity:0},
     to:async (next, cancel) => {
-    await next({ y: 60 ,  opacity:0.8})
-    var start = new Date().getTime();
-    while (new Date().getTime() < start +700);
+    await next({ y: 60 ,  opacity:1})
     await next({ y: -60 ,  opacity:0})
 
   }
