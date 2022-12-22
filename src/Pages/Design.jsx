@@ -63,7 +63,7 @@ export default function Design({user,setUser,selected}){
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
 
  <img onClick={handleEdit} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
- <img src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png" />
+ <img onClick={()=>handleSave()}  src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png" />
 </div>
 <div className="tools">
   
@@ -85,10 +85,7 @@ export default function Design({user,setUser,selected}){
     <div id="btn" className="iconI">
   <img  src="https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/eraser.png" />
     </div> 
-    <div onClick={()=>handleSave()} className="IconI">
-
-      <img src="https://cdn-icons-png.flaticon.com/512/174/174314.png" />
-    </div>
+  
     <div className="toolEl" data-tool={tool}></div>
     
 
