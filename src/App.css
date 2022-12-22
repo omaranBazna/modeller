@@ -158,11 +158,33 @@ height:3px;
 .model-data{
   position:absolute;
   top:70px;
-  width:200px;
-  left:calc(50%-100px);
+  width:400px;
+  left:calc(50% - 200px);
   height:30px;
   display:flex;
   align-items:center;
   justify-content: center;
-  z-index:15;
+  z-index:9;
+  background:black;
+  margin:-5px;
+  padding:10px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.model-data img{
+  width:32px;
+  margin:10px;
+}
+.model-data input{
+  padding:5px;
+  padding-left:15px;
+  width:100%;
+  border:none;
+  outline:none;
+  border-radius: 20px;
+  color:white;
+  background-color: rgb(152, 152, 152);
+  font-weight:800;
+  font-size:20px;
 }
