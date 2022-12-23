@@ -246,8 +246,6 @@ export const setUpThree = (url) => {
             if (minArr[i]) {
               xPos = minArr[i][0] * w;
               yPos = h / 2 - (minArr[i][1] - 0.5) * h;
-
-              console.log(xPos, yPos);
               let d = Math.sqrt(
                 (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
                   (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])

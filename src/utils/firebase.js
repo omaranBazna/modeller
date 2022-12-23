@@ -15,6 +15,7 @@ import {
   doc,
   setDoc,
   getDocs,
+  getDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { generateID } from "./functions";
@@ -38,16 +39,22 @@ const auth = getAuth(app);
 export const saveToStorage = async (file, user, name) => {
   try {
     const id = generateID();
-    const docRef = doc(db, `users/${user.uid}/models/${id}`);
+    const docRef = doc(db, `users/${user.uid}`);
 
-    await setDoc(docRef, {
-      name: name,
-      ref: id,
-    });
+    const document = await getDoc(docRef);
+
+    const data = document.data();
+
+    if (!("collections" in data)) {
+      await setDoc(docRef, {
+        collections: id,
+      });
+    } else {
+    }
 
     const storageRef = ref(storage, `collections/${user.uid}/${id}`);
     const snapshot = await uploadBytes(storageRef, file);
-    console.log(snapshot);
+
     return snapshot;
   } catch (e) {
     console.log(e);
@@ -75,41 +82,16 @@ export const getAllDocs = async (user) => {
   return data;
 };
 
-export const addToDataBase = async (user) => {
-  try {
-    const docRef = doc(db, "users/models", user.uid);
-
-    await setDoc(docRef, {
-      name: "test",
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const singInWithToken = (token) => {
-  return signInWithCustomToken(auth, token)
-    .then((result) => {
-      console.log("result", result);
-      return result.user;
-    })
-    .catch((e) => console.log(e));
-};
 export const signInF = () => {
   return setPersistence(auth, browserSessionPersistence).then(() => {
     return signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log(credential);
         const token = credential.accessToken;
-
-        // The signed-in user info.
         const user = result.user;
-
         window.localStorage.setItem("user", JSON.stringify(user));
         return user;
-        // ...
       })
       .then((user) => {
         return user;

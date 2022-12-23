@@ -6,17 +6,13 @@ import { useState } from "react";
 export default function Models({user,setUser,setSelected}){
 const [models,setModels]=useState([]);
 const navigator=useNavigate();
-
-  useEffect(()=>{
-
+useEffect(()=>{
  const userString=window.localStorage.getItem("user")
  if(userString !=""){
   const userf=JSON.parse(userString);
  setUser(userf)
-
  if(!userf){
   navigator("/")
-  
  }
  getAllDocs(userf).then(data=>{
   setModels(data)
@@ -25,12 +21,7 @@ const navigator=useNavigate();
   navigator("/")
  }
 
-
-  
-
-
-
-  },[])
+ },[])
 
   const openModel=(id)=>{
     setSelected(id)
