@@ -1,8 +1,7 @@
-import { isRouteErrorResponse } from "react-router-dom";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import MODEL from "../models/food.glb";
+import MODEL from "../models/calendar.glb";
 import { regions } from "./regions";
 import Shadow from "../textures/shadow.png";
 export const setUpThree = (url) => {
@@ -84,6 +83,7 @@ export const setUpThree = (url) => {
     const new_material = new THREE.MeshStandardMaterial({
       map: texture,
     });
+
     Obj.material = new_material;
   };
   const calculateMinArr = (minArr, pos) => {
@@ -166,7 +166,7 @@ export const setUpThree = (url) => {
         if (gltf.scene.children[0]) {
           obj = gltf.scene.children[0];
 
-          obj.scale.set(14, 14, 14);
+          obj.scale.set(2, 2, 2);
         }
 
         Obj = obj;
@@ -217,7 +217,7 @@ export const setUpThree = (url) => {
     if (!Obj) {
       return;
     }
-    Obj.rotation.y = 120;
+    //Obj.rotation.y = 120;
 
     renderer.render(scene, camera);
     if (document.querySelector(".toolEl") == undefined) {
@@ -246,6 +246,8 @@ export const setUpThree = (url) => {
             if (minArr[i]) {
               xPos = minArr[i][0] * w;
               yPos = h / 2 - (minArr[i][1] - 0.5) * h;
+
+              console.log(xPos, yPos);
               let d = Math.sqrt(
                 (minArr[i][0] - pos[0]) * (minArr[i][0] - pos[0]) +
                   (minArr[i][1] - pos[1]) * (minArr[i][1] - pos[1])
