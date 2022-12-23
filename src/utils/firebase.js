@@ -18,7 +18,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { generateID } from "./functions";
+import { generateID, generateDirectory } from "./functions";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCGL98TuYt6jAhUoIuMHK9Cb8GPONRanMI",
@@ -38,7 +38,7 @@ const auth = getAuth(app);
 
 export const saveToStorage = async (file, user, name) => {
   try {
-    const id = generateID();
+    let id = generateID();
     const docRef = doc(db, `users/${user.uid}`);
 
     const document = await getDoc(docRef);
@@ -50,9 +50,18 @@ export const saveToStorage = async (file, user, name) => {
         collections: id,
       });
     } else {
+      id = data.collections;
     }
 
-    const storageRef = ref(storage, `collections/${user.uid}/${id}`);
+    let collectionDir = generateDirectory();
+    const modelRef = doc(db, `collections/${id}`);
+    await setDoc(modelRef, {
+      directory: collectionDir,
+    });
+
+    collectionDir = collectionDir.split("").join("/") + "/model";
+    console.log(collectionDir);
+    const storageRef = ref(storage, `collections/${collectionDir}`);
     const snapshot = await uploadBytes(storageRef, file);
 
     return snapshot;

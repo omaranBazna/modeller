@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import MODEL from "../models/calendar.glb";
+import MODEL from "../models/cow.glb";
 import { regions } from "./regions";
 import Shadow from "../textures/shadow.png";
+
 export const setUpThree = (url) => {
   let radius = 0.05;
   let mouseClicked = false;
@@ -86,6 +87,13 @@ export const setUpThree = (url) => {
 
     Obj.material = new_material;
   };
+
+  const setUpTexture = () => {
+    var canvasMap = new THREE.CanvasTexture(ctx.canvas);
+    var mat = new THREE.MeshPhongMaterial();
+    mat.map = canvasMap;
+    Obj.material = mat;
+  };
   const calculateMinArr = (minArr, pos) => {
     raycaster.setFromCamera(pointer, camera);
     const intersection = raycaster.intersectObject(Obj);
@@ -153,6 +161,8 @@ export const setUpThree = (url) => {
     plane.position.x = -0.7;
     scene.add(plane);
   };
+  const ctx2 = document.createElement("canvas").getContext("2d");
+  let texture2;
   const loadModel = () => {
     const loader = new GLTFLoader();
     loader.load(
@@ -171,6 +181,17 @@ export const setUpThree = (url) => {
 
         Obj = obj;
         scene.add(Obj);
+
+        ctx2.canvas.width = 256;
+        ctx2.canvas.height = 256;
+        ctx2.fillStyle = "red";
+        ctx2.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        texture2 = new THREE.CanvasTexture(ctx2.canvas);
+
+        const material = new THREE.MeshBasicMaterial({
+          map: texture2,
+        });
+        Obj.material = material;
       },
       () => {
         console.log("loading");
@@ -180,6 +201,23 @@ export const setUpThree = (url) => {
       }
     );
   };
+  function randInt(min, max) {
+    if (max === undefined) {
+      max = min;
+      min = 0;
+    }
+    return (Math.random() * (max - min) + min) | 0;
+  }
+  function drawRandomDot() {
+    ctx2.fillStyle = `#${randInt(0x1000000).toString(16).padStart(6, "0")}`;
+    ctx2.beginPath();
+
+    const x = randInt(256);
+    const y = randInt(256);
+    const radius = randInt(10, 64);
+    ctx2.arc(x, y, radius, 0, Math.PI * 2);
+    ctx2.fill();
+  }
   const setUpListener = () => {
     btnEl.addEventListener("click", () => {
       ctx.fillStyle = "#ffffff";
@@ -211,12 +249,16 @@ export const setUpThree = (url) => {
       mouseClicked = false;
     });
   };
+  let t = 0;
   const animate = () => {
     requestAnimationFrame(animate);
 
     if (!Obj) {
       return;
     }
+    drawRandomDot();
+    texture2.needsUpdate = true;
+
     //Obj.rotation.y = 120;
 
     renderer.render(scene, camera);
@@ -387,8 +429,12 @@ export const setUpThree = (url) => {
     } else if (option === "rotate") {
       control.enabled = true;
     }
-
-    updateObjTex();
+    t += 1;
+    if (t > 20) {
+      //updateObjTex();
+      t = 0;
+    }
+    //
   };
 
   scene = new THREE.Scene();
@@ -406,7 +452,7 @@ export const setUpThree = (url) => {
     canvas: document.querySelector("#bg"),
     alpha: true,
   });
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(window.devicePixelRatio * 0.5);
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.position.setX(-5);
   camera.position.setZ(25);
@@ -420,5 +466,6 @@ export const setUpThree = (url) => {
   raycaster = new THREE.Raycaster();
   setUpListener();
   updateCopy();
+
   animate();
 };

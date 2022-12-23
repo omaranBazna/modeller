@@ -65,10 +65,24 @@ export const generateID = () => {
   ];
   let generated = "";
   let len = arr.length - 1;
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 30; i++) {
     let index = Math.floor(Math.random() * len);
 
     generated += arr[index];
   }
+  return generated;
+};
+
+export const generateDirectory = () => {
+  const arr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const len = arr.length - 1;
+  let generated = "";
+
+  for (let i = 0; i < 15; i++) {
+    let index = Math.floor(Math.random() * len);
+
+    generated += arr[index];
+  }
+
   return generated;
 };
