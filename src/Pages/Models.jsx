@@ -42,10 +42,11 @@ useEffect(()=>{
      <div className="model">
   
          {models.map((item,index)=>{
+          console.log(item)
           return (
-          <div onClick={()=>{openModel(item.url)}}>
+          <div key={index} onClick={()=>{openModel(item.model)}}>
            
-          <Model  key={index} name={item.name} image={item.imageURL}></Model>
+          <Model   name={item.name} image={item.demo}></Model>
           </div>)
          })}
 

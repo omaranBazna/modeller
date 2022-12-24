@@ -87,9 +87,7 @@ export const getAllModels = async () => {
       const docData = await doc.data();
 
       data.push({
-        imageURL: docData.imageURL,
-        url: docData.url,
-        name: docData.name,
+        ...docData,
       });
     });
 
