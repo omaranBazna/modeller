@@ -1,7 +1,7 @@
 /*Set up the styling */
 
 .App {
-
+  overflow: hidden;
   text-align: center;
   margin:0;
   padding:0;
@@ -98,7 +98,7 @@ height:3px;
   top:0px;
   left:0px;
   overflow: hidden;
- 
+
 }
 
 .colorEl{
@@ -195,4 +195,7 @@ height:3px;
   padding:0;
 left:calc(50% - 125px);
 
+}
+#draw,#copy{
+  display:none;
 }

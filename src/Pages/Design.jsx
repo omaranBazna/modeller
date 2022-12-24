@@ -98,7 +98,7 @@ export default function Design({user,setUser,selected}){
 <Popup name={name} springs={springs} />
 
 
-<div className="model-data">
+<div id="save-bar" className="model-data">
   <input id="modelName" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
 
  <img onClick={handleEdit} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
@@ -107,7 +107,7 @@ export default function Design({user,setUser,selected}){
   
   />
 </div>
-<div className="tools">
+<div id="tools" className="tools">
   
     <div className="iconI" style={{background:tool=="brush"?"#eaeaaa":"white"}}  onClick={()=>{setTool("brush")}} >
     <img   src="https://www.shareicon.net/download/2015/11/25/677858_tools_512x512.png" />
@@ -134,7 +134,7 @@ export default function Design({user,setUser,selected}){
        
        </div>
       <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor}></HexColorPicker>
-        <canvas id="bg"  width="1200" />
+        <canvas id="bg"  width="1200" height="200"/>
        
       
         <canvas id="draw" height="1200" width="1200" />

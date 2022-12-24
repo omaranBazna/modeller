@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import MODEL from "../models/cow.glb";
+import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
 import Shadow from "../textures/shadow.png";
 
@@ -19,6 +19,28 @@ export const setUpThree = (url) => {
   let ctx;
   let h;
   let w;
+
+  let hoverUI_element = true;
+
+  document.getElementById("tools").addEventListener("mouseenter", () => {
+    hoverUI_element = true;
+  });
+  document.getElementById("colorEl").addEventListener("mouseenter", () => {
+    hoverUI_element = true;
+  });
+  document.getElementById("save-bar").addEventListener("mouseenter", () => {
+    hoverUI_element = true;
+  });
+
+  document.getElementById("tools").addEventListener("mouseleave", () => {
+    hoverUI_element = false;
+  });
+  document.getElementById("colorEl").addEventListener("mouseleave", () => {
+    hoverUI_element = false;
+  });
+  document.getElementById("save-bar").addEventListener("mouseleave", () => {
+    hoverUI_element = false;
+  });
 
   btnEl = document.getElementById("btn");
   canvas = document.getElementById("draw");
@@ -90,7 +112,7 @@ export const setUpThree = (url) => {
 
   const setUpTexture = () => {
     var canvasMap = new THREE.CanvasTexture(ctx.canvas);
-    var mat = new THREE.MeshPhongMaterial();
+    var mat = new THREE.MeshStandardMaterial();
     mat.map = canvasMap;
     Obj.material = mat;
   };
@@ -176,29 +198,21 @@ export const setUpThree = (url) => {
         if (gltf.scene.children[0]) {
           obj = gltf.scene.children[0];
 
-          obj.scale.set(2, 2, 2);
+          obj.scale.set(14, 14, 14);
         }
 
         Obj = obj;
         scene.add(Obj);
 
-        ctx2.canvas.width = 256;
-        ctx2.canvas.height = 256;
-        ctx2.fillStyle = "red";
-        ctx2.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        texture2 = new THREE.CanvasTexture(ctx2.canvas);
+        texture2 = new THREE.CanvasTexture(canvas);
 
-        const material = new THREE.MeshBasicMaterial({
+        const material = new THREE.MeshStandardMaterial({
           map: texture2,
         });
         Obj.material = material;
       },
-      () => {
-        console.log("loading");
-      },
-      (e) => {
-        console.log(e);
-      }
+      () => {},
+      (e) => {}
     );
   };
   function randInt(min, max) {
@@ -230,9 +244,9 @@ export const setUpThree = (url) => {
         document.querySelector(".toolEl").getAttribute("data-tool") === "brush"
       ) {
         if (e.deltaY < 0 && radius < 0.5) {
-          radius += 0.001;
+          radius += 0.0003;
         } else if (e.deltaY > 0 && radius > 0.005) {
-          radius -= 0.001;
+          radius -= 0.0003;
         }
       }
     });
@@ -256,7 +270,7 @@ export const setUpThree = (url) => {
     if (!Obj) {
       return;
     }
-    drawRandomDot();
+
     texture2.needsUpdate = true;
 
     //Obj.rotation.y = 120;
@@ -267,7 +281,7 @@ export const setUpThree = (url) => {
     }
     const option = document.querySelector(".toolEl").getAttribute("data-tool");
 
-    if (option === "brush") {
+    if (option === "brush" && !hoverUI_element) {
       control.enabled = false;
 
       if (mouseClicked) {
@@ -275,9 +289,8 @@ export const setUpThree = (url) => {
         const pos = [];
         calculateMinArr(minArr, pos);
 
-        ctx.fillStyle = document
-          .getElementById("colorEl")
-          .getAttribute("data-color");
+        ctx.fillStyle =
+          document.getElementById("colorEl").getAttribute("data-color") + "33";
 
         if (minArr[0]) {
           ctx.beginPath();
@@ -308,9 +321,8 @@ export const setUpThree = (url) => {
         const pos = [];
         calculateMinArr(minArr, pos);
 
-        ctx.fillStyle = document
-          .getElementById("colorEl")
-          .getAttribute("data-color");
+        ctx.fillStyle =
+          document.getElementById("colorEl").getAttribute("data-color") + "33";
 
         if (minArr.length > 0) {
           ctx.beginPath();
@@ -337,7 +349,7 @@ export const setUpThree = (url) => {
           ctx.drawImage(document.getElementById("copy"), 0, 0);
         }
       }
-    } else if (option === "fill") {
+    } else if (option === "fill" && !hoverUI_element) {
       control.enabled = false;
 
       if (mouseClicked) {
@@ -452,7 +464,7 @@ export const setUpThree = (url) => {
     canvas: document.querySelector("#bg"),
     alpha: true,
   });
-  renderer.setPixelRatio(window.devicePixelRatio * 0.5);
+  renderer.setPixelRatio(window.devicePixelRatio * 0.7);
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.position.setX(-5);
   camera.position.setZ(25);
