@@ -1,5 +1,7 @@
 /*Set up the styling */
-
+*{
+  box-sizing: border-box;
+}
 .App {
 
   text-align: center;
@@ -159,15 +161,19 @@ height:3px;
 }
 
 .model{
+  height:100%;
+  padding:20px;
+  background-image: linear-gradient(rgb(121, 121, 121),black);
+  margin-top:60px;
   display:flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
 }
 
 .model-card{
   padding:20px;
-  width:150px;
+  width:200px;
   height:fit-content;
   background-color: black;
   border-radius:20px;
@@ -177,7 +183,12 @@ height:3px;
   color:white;
   flex-direction:column;
   margin:10px;
+  cursor:pointer;
 }
+.model-card:hover{
+  border:10px solid white;
+}
+
 .model-card img{
   
   width:90%;
