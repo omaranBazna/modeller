@@ -34,7 +34,7 @@ useEffect(()=>{
          {models.map((item,index)=>{
           return (
           <div key={index} onClick={()=>{openModel(item.ref)}}>
-          <Model name={item.name}></Model>
+          <Model name={item.name} image={item.image}></Model>
           </div>)
          })}
 

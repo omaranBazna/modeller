@@ -108,6 +108,13 @@ height:3px;
   z-index:10;
   box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
 }
+.select {
+  position: absolute;
+  top:180px;
+  z-index:10;
+  right:20px;
+  width:20px;
+}
 .tools{
   position: absolute;
   top:200px;

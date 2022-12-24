@@ -6,6 +6,15 @@ import { saveToStorage } from "../utils/firebase";
 import { downloadModal } from "../utils/firebase";
 import Popup from "../Components/Popup";
 import { useSpring } from "@react-spring/web";
+
+import Select, { components } from "react-select";
+
+
+const options = [
+  { value: 1, label: "1", copy: true },
+  { value:2, label: "2", copy: true },
+  { value: 3, label: "3", copy: true }
+];
 export default function Design({user,setUser,selected}){
 
   const [springs, api] = useSpring(()=>({
@@ -127,12 +136,18 @@ export default function Design({user,setUser,selected}){
     <div id="btn" className="iconI">
   <img  src="https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/eraser.png" />
     </div> 
+
+ 
+      
   
     <div className="toolEl" data-tool={tool}></div>
     
 
        
-       </div>
+       </div> 
+         <Select className="select" components={{ Option: ()=>{
+      return <img src="https://icons.iconarchive.com/icons/iconsmind/outline/512/Cursor-Move-icon.png" />
+    } }} options={options} />
       <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor}></HexColorPicker>
         <canvas id="bg"  width="1200" height="200"/>
        

@@ -80,14 +80,20 @@ export const downloadModal = async (user, modelRef) => {
 };
 
 export const getAllDocs = async (user) => {
-  const querySnapshot = await getDocs(
-    collection(db, `users/${user.uid}/models`)
-  );
+  const querySnapshot = await getDocs(collection(db, `models`));
   const data = [];
-  querySnapshot.forEach((doc) => {
-    data.push(doc.data());
-  });
 
+  querySnapshot.forEach(async (doc) => {
+    const docData = doc.data();
+    const imageURL = await getDownloadURL(
+      ref(storage, `${docData.url}/demo.png`)
+    ).catch((error) => {
+      console.log(error);
+    });
+    const name = docData.name;
+    data.push({ url: docData.url, imageURL, name });
+  });
+  console.log(data);
   return data;
 };
 
