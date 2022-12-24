@@ -158,8 +158,24 @@ height:3px;
   display:none;
 }
 
-.model{
+.model-card{
   padding:20px;
+  width:150px;
+  height:fit-content;
+  background-color: black;
+  border-radius:20px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  color:white;
+  flex-direction:column;
+  margin:10px;
+}
+.model img{
+  
+  width:90%;
+  border-radius:20px;
+  
 }
 
 .model-data{
