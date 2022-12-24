@@ -199,3 +199,20 @@ left:calc(50% - 125px);
 #draw,#copy{
   display:none;
 }
+
+#bg{
+  cursor:none;
+}
+
+#img-icon{
+  width:30px;
+  height:30px;
+  position:absolute;
+  top:0px;
+  left:0px;
+  z-index:200;
+  -moz-user-select: none;
+-webkit-user-select: none;
+user-select: none;
+pointer-events: none;
+}

@@ -139,6 +139,7 @@ export default function Design({user,setUser,selected}){
       
         <canvas id="draw" height="1200" width="1200" />
         <canvas id="copy" height="1200" width="1200" />
+        <img id="img-icon" src="https://cdn-icons-png.flaticon.com/512/587/587377.png" />
    
      </div>
     )

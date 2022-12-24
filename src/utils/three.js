@@ -19,6 +19,7 @@ export const setUpThree = (url) => {
   let ctx;
   let h;
   let w;
+  let mousePos = { x: 0, y: 0 };
 
   let hoverUI_element = true;
 
@@ -232,6 +233,7 @@ export const setUpThree = (url) => {
     ctx2.arc(x, y, radius, 0, Math.PI * 2);
     ctx2.fill();
   }
+
   const setUpListener = () => {
     btnEl.addEventListener("click", () => {
       ctx.fillStyle = "#ffffff";
@@ -254,6 +256,8 @@ export const setUpThree = (url) => {
     var onMouseMove = (event) => {
       pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mousePos.x = event.clientX;
+      mousePos.y = event.clientY;
     };
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mousedown", () => {
@@ -281,7 +285,13 @@ export const setUpThree = (url) => {
     }
     const option = document.querySelector(".toolEl").getAttribute("data-tool");
 
+    document.getElementById("img-icon").style.top = `${mousePos.y - 30}px`;
+    document.getElementById("img-icon").style.left = `${mousePos.x}px`;
+
     if (option === "brush" && !hoverUI_element) {
+      document.getElementById("img-icon").src =
+        "https://cdn-icons-png.flaticon.com/512/587/587377.png";
+
       control.enabled = false;
 
       if (mouseClicked) {
@@ -351,6 +361,9 @@ export const setUpThree = (url) => {
       }
     } else if (option === "fill" && !hoverUI_element) {
       control.enabled = false;
+
+      document.getElementById("img-icon").src =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Toicon-icon-stone-fill.svg/1024px-Toicon-icon-stone-fill.svg.png";
 
       if (mouseClicked) {
         raycaster.setFromCamera(pointer, camera);
@@ -440,7 +453,11 @@ export const setUpThree = (url) => {
       }
     } else if (option === "rotate") {
       control.enabled = true;
+
+      document.getElementById("img-icon").src =
+        "https://static.thenounproject.com/png/24052-200.png";
     }
+
     t += 1;
     if (t > 20) {
       //updateObjTex();
