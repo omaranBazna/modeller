@@ -33,6 +33,7 @@ useEffect(()=>{
  
 
   const openModel=(id)=>{
+    console.log(id)
     setSelected(id)
     navigator("/design")
     }
@@ -42,9 +43,9 @@ useEffect(()=>{
   
          {models.map((item,index)=>{
           return (
-          <div key={index} onClick={()=>{openModel(item.ref)}}>
+          <div onClick={()=>{openModel(item.url)}}>
            
-          <Model name={item.name} image={item.imageURL}></Model>
+          <Model  key={index} name={item.name} image={item.imageURL}></Model>
           </div>)
          })}
 

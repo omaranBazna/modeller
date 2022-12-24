@@ -71,12 +71,12 @@ export const saveToStorage = async (file, user, name) => {
   }
 };
 
-export const downloadModal = async (user, modelRef) => {
-  return getDownloadURL(
-    ref(storage, `collections/${user.uid}/${modelRef}`)
-  ).catch((error) => {
-    // Handle any errors
-  });
+export const downloadModal = async (modelRef) => {
+  return getDownloadURL(ref(storage, `${modelRef}/model.glb`)).catch(
+    (error) => {
+      console.log(error);
+    }
+  );
 };
 
 export const getAllModels = async () => {

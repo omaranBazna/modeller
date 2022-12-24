@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import MODEL from "../models/CuteKitty.glb";
 import { regions } from "./regions";
 import Shadow from "../textures/shadow.png";
 
@@ -52,7 +51,7 @@ export const setUpThree = (url) => {
 
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+  /*
   if (url) {
     var img = new Image();
 
@@ -64,6 +63,7 @@ export const setUpThree = (url) => {
 
     img.src = url;
   }
+  */
   const pointer = new THREE.Vector2();
   const setUpLight = () => {
     const light = new THREE.PointLight(0xffffff);
@@ -189,7 +189,7 @@ export const setUpThree = (url) => {
   const loadModel = () => {
     const loader = new GLTFLoader();
     loader.load(
-      MODEL,
+      url,
       function (gltf) {
         gltf.scene.position.y = 0;
 
@@ -213,7 +213,9 @@ export const setUpThree = (url) => {
         Obj.material = material;
       },
       () => {},
-      (e) => {}
+      (e) => {
+        console.log(e);
+      }
     );
   };
   function randInt(min, max) {
