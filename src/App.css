@@ -158,6 +158,13 @@ height:3px;
   display:none;
 }
 
+.model{
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
 .model-card{
   padding:20px;
   width:150px;
@@ -171,7 +178,7 @@ height:3px;
   flex-direction:column;
   margin:10px;
 }
-.model img{
+.model-card img{
   
   width:90%;
   border-radius:20px;

@@ -39,7 +39,7 @@ useEffect(()=>{
     return (
 
      <div className="model">
-       <h1>Model</h1>
+  
          {models.map((item,index)=>{
           return (
           <div key={index} onClick={()=>{openModel(item.ref)}}>
