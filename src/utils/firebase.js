@@ -72,11 +72,21 @@ export const saveToStorage = async (file, user, name) => {
 };
 
 export const downloadModal = async (modelRef) => {
-  return getDownloadURL(ref(storage, `${modelRef}/model.glb`)).catch(
-    (error) => {
-      console.log(error);
-    }
-  );
+  try {
+    const url = await getDownloadURL(ref(storage, `${modelRef}/model.glb`));
+    const regions = await getDownloadURL(
+      ref(storage, `${modelRef}/regions.txt`)
+    );
+    console.log("regions", regions);
+    const response = await fetch(regions);
+
+    const text = await response.text();
+    console.log(text);
+    const arr = text.split(",");
+    return { url: url, regions: arr };
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getAllModels = async () => {

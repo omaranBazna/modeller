@@ -90,11 +90,8 @@ export default function Design({user,setUser,selected}){
    }
 
    if(selected){
-   downloadModal(selected).then(url=>{
-     
-   setUpThree(url)
+   setUpThree(selected.model,selected.regions)
 
-    })
    }else{
        setUpThree();
    }

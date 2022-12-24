@@ -32,9 +32,13 @@ useEffect(()=>{
 
  
 
-  const openModel=(id)=>{
-    console.log(id)
-    setSelected(id)
+  const openModel=async(model,regions)=>{
+    const response=await fetch(regions)
+    const text=await response.text()
+    const arr=text.split(",").map(x=>eval(x))
+
+
+    setSelected({model:model,regions:arr})
     navigator("/design")
     }
     return (
@@ -42,10 +46,9 @@ useEffect(()=>{
      <div className="model">
   
          {models.map((item,index)=>{
-          console.log(item)
+         
           return (
-          <div key={index} onClick={()=>{openModel(item.model)}}>
-           
+          <div key={index} onClick={()=>{openModel(item.model,item.regions)}}>
           <Model   name={item.name} image={item.demo}></Model>
           </div>)
          })}

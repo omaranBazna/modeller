@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { regions } from "./regions";
+
 import Shadow from "../textures/shadow.png";
 
-export const setUpThree = (url) => {
+export const setUpThree = (url, regions) => {
   let radius = 0.05;
   let mouseClicked = false;
   let Obj;
