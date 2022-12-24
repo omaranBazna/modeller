@@ -79,22 +79,24 @@ export const downloadModal = async (user, modelRef) => {
   });
 };
 
-export const getAllDocs = async (user) => {
-  const querySnapshot = await getDocs(collection(db, `models`));
-  const data = [];
+export const getAllModels = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, `models`));
+    const data = [];
+    querySnapshot.forEach(async (doc) => {
+      const docData = await doc.data();
 
-  querySnapshot.forEach(async (doc) => {
-    const docData = doc.data();
-    const imageURL = await getDownloadURL(
-      ref(storage, `${docData.url}/demo.png`)
-    ).catch((error) => {
-      console.log(error);
+      data.push({
+        imageURL: docData.imageURL,
+        url: docData.url,
+        name: docData.name,
+      });
     });
-    const name = docData.name;
-    data.push({ url: docData.url, imageURL, name });
-  });
-  console.log(data);
-  return data;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const signInF = () => {

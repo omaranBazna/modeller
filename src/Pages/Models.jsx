@@ -1,11 +1,17 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { getAllDocs } from "../utils/firebase";
+import { getAllModels } from "../utils/firebase";
 import Model from "../Components/Model";
 import { useState } from "react";
 export default function Models({user,setUser,setSelected}){
 const [models,setModels]=useState([]);
 const navigator=useNavigate();
+
+const loadModels=async()=>{
+  const data=await getAllModels();
+  setModels(data)
+
+}
 useEffect(()=>{
  const userString=window.localStorage.getItem("user")
  if(userString !=""){
@@ -14,14 +20,17 @@ useEffect(()=>{
  if(!userf){
   navigator("/")
  }
- getAllDocs(userf).then(data=>{
-  setModels(data)
-})
+ 
+  loadModels();
+
  }else{
   navigator("/")
  }
 
  },[])
+
+
+ 
 
   const openModel=(id)=>{
     setSelected(id)
@@ -34,7 +43,8 @@ useEffect(()=>{
          {models.map((item,index)=>{
           return (
           <div key={index} onClick={()=>{openModel(item.ref)}}>
-          <Model name={item.name} image={item.image}></Model>
+           
+          <Model name={item.name} image={item.imageURL}></Model>
           </div>)
          })}
 
