@@ -34,7 +34,7 @@ useEffect(()=>{
                <h1>{user.displayName}</h1>
            </div>
            <div className="collections">
-            
+           
            </div>
      </div>
     )

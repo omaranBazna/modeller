@@ -19,6 +19,11 @@ export default function Navbar({user}){
                 </Link>
                } 
              </li>
+             <li>
+              <button>
+                Sign Out
+              </button>
+             </li>
              </ul>
         </nav>
     )
