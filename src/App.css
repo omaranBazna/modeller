@@ -29,6 +29,7 @@ nav{
   justify-content: space-between;
   background-color: black;
   color:white;
+  border-bottom-left-radius: 30px;
 }
 nav div{
   width:100px;
@@ -167,7 +168,7 @@ height:3px;
   height:100%;
   padding:20px;
   background-image: linear-gradient(rgb(121, 121, 121),black);
-  margin-top:60px;
+  margin-top:0px;
   display:flex;
   align-items: flex-start;
   justify-content: flex-start;
