@@ -198,10 +198,10 @@ height:3px;
 
 .model-data{
   position:absolute;
-  top:70px;
+  top:0px;
   width:400px;
   left:calc(50% - 200px);
-  height:30px;
+  height:60px;
   display:flex;
   align-items:center;
   justify-content: center;
@@ -211,6 +211,7 @@ height:3px;
   padding:10px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+
 }
 
 .model-data img{
