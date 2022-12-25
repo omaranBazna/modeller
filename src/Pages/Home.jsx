@@ -1,7 +1,8 @@
 import SignIn from "../Components/SingIn"
 import { useEffect } from "react";
-import{singInWithToken} from "../utils/firebase"
+import { useNavigate } from "react-router";
 export default function Home({user,setUser}){
+    const navigator=useNavigate();
     useEffect(()=>{
 
         const userString=window.localStorage.getItem("user")
@@ -9,7 +10,11 @@ export default function Home({user,setUser}){
      if(userString !=""){
       const userf=JSON.parse(userString);
      setUser(userf)
-    
+     
+     if(user || userf){
+    navigator("/models")
+
+     }
     
      }
     

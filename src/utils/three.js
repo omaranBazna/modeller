@@ -203,6 +203,8 @@ export const setUpThree = (url, regions) => {
         }
 
         Obj = obj;
+
+        console.log(Obj.geometry.vertices);
         scene.add(Obj);
 
         texture2 = new THREE.CanvasTexture(canvas);
