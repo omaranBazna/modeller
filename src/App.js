@@ -14,12 +14,6 @@ function App() {
       <Navbar user={user} />
       <Routes>
         <Route
-          path="/models"
-          element={
-            <Models setSelected={setSelected} user={user} setUser={setUser} />
-          }
-        />
-        <Route
           path="/design"
           element={<Design selected={selected} user={user} setUser={setUser} />}
         />
@@ -29,7 +23,12 @@ function App() {
             <Profile selected={selected} user={user} setUser={setUser} />
           }
         />
-        <Route path="/" element={<Home user={user} setUser={setUser} />} />
+        <Route
+          path="/"
+          element={
+            <Home setSelected={setSelected} user={user} setUser={setUser} />
+          }
+        />
       </Routes>
     </div>
   );

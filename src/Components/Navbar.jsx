@@ -13,9 +13,9 @@ export default function Navbar({user}){
 
              <div>
                 {user &&
-                <>
+                <Link to="/profile">
                 <p>{user.displayName}</p>
-                </>
+                </Link>
                } 
              </div>
         </nav>
