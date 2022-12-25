@@ -11,7 +11,8 @@ function App() {
   const [selected, setSelected] = useState(null);
   return (
     <div className="App">
-      <Navbar user={user} />
+      {user && <Navbar user={user} setUser={setUser} />}
+
       <Routes>
         <Route
           path="/design"

@@ -96,7 +96,7 @@ export default function Design({user,setUser,selected}){
        setUpThree();
    }
 
-    },[])
+    },[user])
     return (
 
      <div className="design">
