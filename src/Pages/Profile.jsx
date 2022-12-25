@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 
 import { useState } from "react";
-export default function Models({user,setUser,setSelected}){
+export default function Profile({user,setUser,setSelected}){
 const [models,setModels]=useState([]);
 const navigator=useNavigate();
 
