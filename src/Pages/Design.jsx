@@ -114,7 +114,7 @@ export default function Design({user,setUser,selected}){
   />
 </div>
 <div id="tools" className="tools">
-  
+   
     <div className="iconI" style={{background:tool=="brush"?"#eaeaaa":"white"}}  onClick={()=>{setTool("brush")}} >
     <img   src="https://www.shareicon.net/download/2015/11/25/677858_tools_512x512.png" />
   
@@ -133,7 +133,7 @@ export default function Design({user,setUser,selected}){
     <div id="btn" className="iconI">
   <img  src="https://findicons.com/files/icons/2711/free_icons_for_windows8_metro/512/eraser.png" />
     </div> 
-
+   
  
       
   
@@ -142,10 +142,18 @@ export default function Design({user,setUser,selected}){
 
        
        </div> 
+       <div>
+
+    
+       </div>
          <Select className="select" components={{ Option: ()=>{
       return <img src="https://icons.iconarchive.com/icons/iconsmind/outline/512/Cursor-Move-icon.png" />
     } }} options={options} />
-      <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor}></HexColorPicker>
+      <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor}>
+
+
+      </HexColorPicker>
+      <input id="brush-range" className="brush-range" type="range" min="1" max="10" />
         <canvas id="bg"  width="1200" height="200"/>
        
       

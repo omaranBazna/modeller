@@ -249,11 +249,12 @@ export const setUpThree = (url, regions) => {
       if (
         document.querySelector(".toolEl").getAttribute("data-tool") === "brush"
       ) {
-        if (e.deltaY < 0 && radius < 0.5) {
+        if (e.deltaY < 0 && radius < 0.05) {
           radius += 0.0003;
         } else if (e.deltaY > 0 && radius > 0.005) {
           radius -= 0.0003;
         }
+        document.getElementById("brush-range").value = `${radius * 200}`;
       }
     });
 

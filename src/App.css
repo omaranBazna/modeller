@@ -117,6 +117,15 @@ flex-direction: column;
   z-index:10;
   box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
 }
+
+
+.brush-range{
+  position:absolute;
+  top:400px;
+  left:20px;
+  z-index:10;
+
+}
 .select {
   position: absolute;
   top:180px;
@@ -336,3 +345,5 @@ input[type="file"] {
   width:55px;
   height:55px;
 }
+
+
