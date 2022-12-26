@@ -15,21 +15,22 @@ const loadModels=async()=>{
 
 }
     useEffect(()=>{
+ 
 
         const userString=window.localStorage.getItem("user")
     
-     if(userString !=""){
+     if(!user && userString !=""){
       userf=JSON.parse(userString);
      setUser(userf)
      
      
-     if(user || userf){
+     
+     }
+    if(user || userf){
         loadModels();
      }
-     }
-    
-    
-      },[])
+        
+      },[user])
 
 
 
@@ -43,7 +44,7 @@ const loadModels=async()=>{
         navigator("/design")
         }
 
-      if(!user && !userf){
+      if(!user){
     return (
 
      <div className="home">    
@@ -52,7 +53,6 @@ const loadModels=async()=>{
      </div>
     )
       }
-
 
 
 

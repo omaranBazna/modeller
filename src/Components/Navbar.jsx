@@ -1,7 +1,9 @@
 
 import { Link } from "react-router-dom"
 import { signOutF } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
 export default function Navbar({user,setUser}){
+  const navigator=useNavigate();
 const handleSignOut=async()=>{
 
 
@@ -10,6 +12,7 @@ await signOutF();
 
       setUser(null);
       window.localStorage.setItem("user","");
+      navigator("/")
  
 }
     return (

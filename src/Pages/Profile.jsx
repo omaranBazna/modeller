@@ -31,7 +31,7 @@ useEffect(()=>{
      <div className="profile">
            <div className="profile-details">
                <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
-               <h1>{user.displayName}</h1>
+               <h1>{user && user.displayName}</h1>
            </div>
            <div className="collections">
            
