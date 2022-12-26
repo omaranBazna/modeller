@@ -17,7 +17,13 @@ import {
   getDocs,
   getDoc,
 } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { generateID, generateDirectory } from "./functions";
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -60,7 +66,6 @@ export const saveToStorage = async (file, user, name) => {
     });
 
     collectionDir = collectionDir.split("").join("/") + "/model";
-    console.log(collectionDir);
     const storageRef = ref(storage, `collections/${collectionDir}`);
     const snapshot = await uploadBytes(storageRef, file);
 
@@ -68,6 +73,33 @@ export const saveToStorage = async (file, user, name) => {
   } catch (e) {
     console.log(e);
     return null;
+  }
+};
+
+export const saveUserProfile = async (user, name, file) => {
+  try {
+    const docRef = doc(db, `users/${user.uid}`);
+
+    let collectionDir = generateDirectory();
+    let collectionDirStr = collectionDir.split("").join("/") + "/model";
+    const storageRef = ref(storage, `users/${collectionDirStr}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+
+    const document = await getDoc(docRef);
+    const data = document.data();
+    if (data.imageURL) {
+      storageRef = ref(storage, data.imageDir);
+      await deleteObject(storageRef);
+    }
+    await setDoc(docRef, {
+      ...document.data(),
+      profileName: name,
+      imageURL: url,
+      imageDir: `users/${collectionDirStr}`,
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
 

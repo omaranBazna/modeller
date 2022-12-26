@@ -1,17 +1,18 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-
+import { saveUserProfile } from "../utils/firebase";
 import { useState } from "react";
-export default function Profile({user,setUser,setSelected}){
+export default function Profile({user,setUser}){
 const [editable,setEditable]=useState(true);
 const [name,setName]=useState("");
+const [file,setFile]=useState(null);
 const navigator=useNavigate();
 const loadPic=(e)=>{
 
     var fr = new FileReader();
 const file=e.target.files[0];
-
+setFile(file);
 fr.onload = function () {
     document.getElementById("profile-image").src = fr.result;
 }
@@ -23,7 +24,8 @@ const handleEdit=()=>{
     document.getElementById("profile-name").select();
 }
 
-const handleSave=()=>{
+const handleSave=async()=>{
+await saveUserProfile(user,name,file);
 
 }
 useEffect(()=>{
