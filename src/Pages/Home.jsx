@@ -1,9 +1,9 @@
 import SignIn from "../Components/SingIn"
 import { useEffect ,useState} from "react";
-import { getAllModels } from "../utils/firebase";
+import { getAllModels ,getUserProfile} from "../utils/firebase";
 import { useNavigate } from "react-router";
 import Model from "../Components/Model";
-export default function Home({user,setUser,setSelected}){
+export default function Home({user,setUser,setSelected,setProfile}){
     const navigator=useNavigate();
    let userf;
     const [models,setModels]=useState([]);
@@ -28,7 +28,9 @@ const loadModels=async()=>{
      }
     if(user || userf){
         loadModels();
-
+          getUserProfile(user).then(profile=>{
+            setProfile(profile)
+          })
         
      }
         
