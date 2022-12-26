@@ -9,9 +9,13 @@ import Models from "./Pages/Models";
 function App() {
   const [user, setUser] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [profile, setProfile] = useState({
+    name: "username",
+    url: "https://media.istockphoto.com/id/517998264/vector/male-user-icon.jpg?s=612x612&w=0&k=20&c=4RMhqIXcJMcFkRJPq6K8h7ozuUoZhPwKniEke6KYa_k=",
+  });
   return (
     <div className="App">
-      {user && <Navbar user={user} setUser={setUser} />}
+      {user && <Navbar profile={profile} user={user} setUser={setUser} />}
 
       <Routes>
         <Route
@@ -21,13 +25,24 @@ function App() {
         <Route
           path="/profile"
           element={
-            <Profile selected={selected} user={user} setUser={setUser} />
+            <Profile
+              profile={profile}
+              setProfile={setProfile}
+              selected={selected}
+              user={user}
+              setUser={setUser}
+            />
           }
         />
         <Route
           path="/"
           element={
-            <Home setSelected={setSelected} user={user} setUser={setUser} />
+            <Home
+              setProfile={setProfile}
+              setSelected={setSelected}
+              user={user}
+              setUser={setUser}
+            />
           }
         />
       </Routes>
