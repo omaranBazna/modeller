@@ -7,7 +7,17 @@ export default function Profile({user,setUser,setSelected}){
 const [editable,setEditable]=useState(true);
 const [name,setName]=useState("");
 const navigator=useNavigate();
+const loadPic=(e)=>{
 
+    var fr = new FileReader();
+const file=e.target.files[0];
+
+fr.onload = function () {
+    document.getElementById("profile-image").src = fr.result;
+}
+fr.readAsDataURL(file);
+
+}
 const handleEdit=()=>{
     setEditable(false);
     document.getElementById("profile-name").select();
@@ -40,11 +50,13 @@ useEffect(()=>{
            <div className="profile-details">
             <label>
 
-          <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
+          <img id="profile-image" src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
                <img className="profile-image-edit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png" />
            <input type="file"
        id="avatar" name="avatar"
-       accept="image/png, image/jpeg">
+       accept="image/png, image/jpeg"
+       onChange={(e)=>{loadPic(e)}}
+       >
 </input> 
            </label> 
                 
@@ -59,11 +71,14 @@ useEffect(()=>{
                 }
 
                 <img onClick={handleEdit}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
-  <img  onClick={handleSave} 
+  
+               
+               </div>
+               <div  onClick={handleSave} className="profile-name">
+                <h1 >Save</h1><img   
  src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png"
   
   />
-               
                </div>
            </div>
            <div className="collections">
