@@ -2,11 +2,10 @@
 import { Link } from "react-router-dom"
 import { signOutF } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-export default function Navbar({user,setUser}){
+import Profile from "../Pages/Profile";
+export default function Navbar({user,profile,setUser}){
   const navigator=useNavigate();
 const handleSignOut=async()=>{
-
-
 
 await signOutF();
 
@@ -29,7 +28,7 @@ await signOutF();
              <li>
                 
                 <Link to="/profile">
-                <p>{user.displayName}</p>
+                <p>{profile.name}</p>
                 </Link>
                
              </li>

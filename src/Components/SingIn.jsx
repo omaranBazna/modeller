@@ -1,7 +1,7 @@
 import { signInF } from "../utils/firebase";
 import { signOutF } from "../utils/firebase";
 import GoogleButton from 'react-google-button'
-import { addToDataBase } from "../utils/firebase";
+
 export default function SignIn({user,setUser}){
    
   

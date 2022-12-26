@@ -1,4 +1,7 @@
 // Import the functions you need from the SDKs you need
+
+const DEFAULT_PROFILE_URL =
+  "https://media.istockphoto.com/id/517998264/vector/male-user-icon.jpg?s=612x612&w=0&k=20&c=4RMhqIXcJMcFkRJPq6K8h7ozuUoZhPwKniEke6KYa_k=";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -103,6 +106,17 @@ export const saveUserProfile = async (user, name, file) => {
   }
 };
 
+export const getUserProfile = async (user) => {
+  const docRef = doc(db, `users/${user.uid}`);
+
+  const document = await (await getDoc(docRef)).data();
+  const result = {
+    name: document.profileName ? document.profileName : user.displayName,
+    url: document.imageURL ? document.imageURL : DEFAULT_PROFILE_URL,
+  };
+
+  return result;
+};
 export const downloadModal = async (modelRef) => {
   try {
     const url = await getDownloadURL(ref(storage, `${modelRef}/model.glb`));
