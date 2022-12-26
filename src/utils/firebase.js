@@ -81,8 +81,8 @@ export const saveUserProfile = async (user, name, file) => {
     const docRef = doc(db, `users/${user.uid}`);
 
     let collectionDir = generateDirectory();
-    let collectionDirStr = collectionDir.split("").join("/") + "/model";
-    const storageRef = ref(storage, `users/${collectionDirStr}`);
+    let collectionDirStr = collectionDir.split("").join("/") + "/profile";
+    let storageRef = ref(storage, `users/${collectionDirStr}`);
     const snapshot = await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
 
