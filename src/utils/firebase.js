@@ -1,7 +1,5 @@
 // Import the functions you need from the SDKs you need
 
-const DEFAULT_PROFILE_URL =
-  "https://media.istockphoto.com/id/517998264/vector/male-user-icon.jpg?s=612x612&w=0&k=20&c=4RMhqIXcJMcFkRJPq6K8h7ozuUoZhPwKniEke6KYa_k=";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -28,6 +26,9 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { generateID, generateDirectory } from "./functions";
+
+const DEFAULT_PROFILE_URL =
+  "https://media.istockphoto.com/id/517998264/vector/male-user-icon.jpg?s=612x612&w=0&k=20&c=4RMhqIXcJMcFkRJPq6K8h7ozuUoZhPwKniEke6KYa_k=";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCGL98TuYt6jAhUoIuMHK9Cb8GPONRanMI",
@@ -81,26 +82,36 @@ export const saveToStorage = async (file, user, name) => {
 
 export const saveUserProfile = async (user, name, file) => {
   try {
-    const docRef = doc(db, `users/${user.uid}`);
+    if (file) {
+      const docRef = doc(db, `users/${user.uid}`);
 
-    let collectionDir = generateDirectory();
-    let collectionDirStr = collectionDir.split("").join("/") + "/profile";
-    let storageRef = ref(storage, `users/${collectionDirStr}`);
-    const snapshot = await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
+      let collectionDir = generateDirectory();
+      let collectionDirStr = collectionDir.split("").join("/") + "/profile";
+      let storageRef = ref(storage, `users/${collectionDirStr}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
 
-    const document = await getDoc(docRef);
-    const data = document.data();
-    if (data.imageURL) {
-      storageRef = ref(storage, data.imageDir);
-      await deleteObject(storageRef);
+      const document = await getDoc(docRef);
+      const data = document.data();
+      if (data.imageURL) {
+        storageRef = ref(storage, data.imageDir);
+        await deleteObject(storageRef);
+      }
+      await setDoc(docRef, {
+        ...document.data(),
+        profileName: name,
+        imageURL: url,
+        imageDir: `users/${collectionDirStr}`,
+      });
+    } else {
+      const docRef = doc(db, `users/${user.uid}`);
+
+      const document = await getDoc(docRef);
+      await setDoc(docRef, {
+        ...document.data(),
+        profileName: name,
+      });
     }
-    await setDoc(docRef, {
-      ...document.data(),
-      profileName: name,
-      imageURL: url,
-      imageDir: `users/${collectionDirStr}`,
-    });
   } catch (e) {
     console.log(e);
   }

@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom"
 
 import { saveUserProfile } from "../utils/firebase";
 import { useState } from "react";
-export default function Profile({user,setUser}){
+export default function Profile({user,setUser,profile,setProfile}){
 const [editable,setEditable]=useState(true);
 const [name,setName]=useState("");
+const [tempURL,setTempUrl]=useState("")
 const [file,setFile]=useState(null);
 const navigator=useNavigate();
 const loadPic=(e)=>{
@@ -15,6 +16,7 @@ const file=e.target.files[0];
 setFile(file);
 fr.onload = function () {
     document.getElementById("profile-image").src = fr.result;
+    setTempUrl(fr.result);
 }
 fr.readAsDataURL(file);
 
@@ -25,7 +27,10 @@ const handleEdit=()=>{
 }
 
 const handleSave=async()=>{
+
 await saveUserProfile(user,name,file);
+
+setProfile({name:name,url:tempURL?tempURL:profile.url})
 
 }
 useEffect(()=>{
@@ -42,7 +47,7 @@ useEffect(()=>{
  }else{
   navigator("/")
  }
-
+setName(profile.name)
  },[])
 
 
@@ -52,7 +57,7 @@ useEffect(()=>{
            <div className="profile-details">
             <label>
 
-          <img id="profile-image" src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
+          <img id="profile-image" src={profile.url} />
                <img className="profile-image-edit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png" />
            <input type="file"
        id="avatar" name="avatar"
