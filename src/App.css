@@ -326,3 +326,6 @@ border:none !important;
 width:50px !important;
 
 }
+input[type="file"] {
+  display: none;
+}
