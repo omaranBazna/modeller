@@ -238,7 +238,8 @@ height:3px;
   width:32px;
   margin:10px;
 }
-.model-data input{
+
+.model-data input,#profile-name{
   padding:5px;
   padding-left:15px;
   width:100%;
@@ -250,6 +251,11 @@ height:3px;
   font-weight:800;
   font-size:20px;
  
+}
+#profile-name{
+  border-radius:10px;
+  width:fit-content;
+  padding:10px;
 }
 
 .popup{
@@ -300,4 +306,15 @@ width:110px;
   background-color: rgba(0, 0, 0, 0.95);
   border-radius:40px;
   margin:auto;
+}
+
+.profile-name{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap:20px;
+  padding:10px;
+}
+.profile-name img{
+  width:40px;
 }

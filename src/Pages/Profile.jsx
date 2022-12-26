@@ -4,10 +4,18 @@ import { useNavigate } from "react-router-dom"
 
 import { useState } from "react";
 export default function Profile({user,setUser,setSelected}){
-const [models,setModels]=useState([]);
+const [editable,setEditable]=useState(true);
+const [name,setName]=useState("");
 const navigator=useNavigate();
 
+const handleEdit=()=>{
+    setEditable(false);
+    document.getElementById("profile-name").select();
+}
 
+const handleSave=()=>{
+
+}
 useEffect(()=>{
  const userString=window.localStorage.getItem("user")
  if(userString !=""){
@@ -23,7 +31,7 @@ useEffect(()=>{
   navigator("/")
  }
 
- },[])
+ },[user])
 
 
     return (
@@ -31,7 +39,21 @@ useEffect(()=>{
      <div className="profile">
            <div className="profile-details">
                <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
-               <h1>{user && user.displayName}</h1>
+               <div className="profile-name">
+                
+                {user &&
+                
+                <input id="profile-name" readOnly={editable} value={name} onChange={(e)=>{setName(e.target.value)}} onBlur={()=>{setEditable(true)} }   />
+
+                }
+
+                <img onClick={handleEdit}  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLwQHBxiWVdO-bvNZEtEDNHgC-zii8L5gSQQ&usqp=CAU" />
+  <img  onClick={handleSave} 
+ src="https://findicons.com/files/icons/2315/default_icon/256/save_inv.png"
+  
+  />
+               
+               </div>
            </div>
            <div className="collections">
            
