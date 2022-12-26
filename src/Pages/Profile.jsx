@@ -31,7 +31,7 @@ useEffect(()=>{
   navigator("/")
  }
 
- },[user])
+ },[])
 
 
     return (
@@ -39,6 +39,9 @@ useEffect(()=>{
      <div className="profile">
            <div className="profile-details">
                <img src="https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-default-avatar-profile-icon-vector-social-media-user-image-vector-illustration-227787227.jpg" />
+               <img className="profile-image-edit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Edit_icon_%28the_Noun_Project_30184%29.svg/1024px-Edit_icon_%28the_Noun_Project_30184%29.svg.png" />
+           
+               
                <div className="profile-name">
                 
                 {user &&
