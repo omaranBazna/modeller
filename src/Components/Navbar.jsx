@@ -28,7 +28,10 @@ await signOutF();
              <li>
                 
                 <Link to="/profile">
-                <p>{profile.name}</p>
+                  <div className="profile-box">
+                    <img src={profile.url} />
+        
+                </div>
                 </Link>
                
              </li>
