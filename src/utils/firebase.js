@@ -66,6 +66,7 @@ export const saveToStorage = async (file, user, name) => {
     const modelRef = doc(db, `collections/${id}/collections/${saveId}`);
     await setDoc(modelRef, {
       directory: collectionDir,
+      name: name,
     });
 
     collectionDir = collectionDir.split("").join("/") + "/model";
