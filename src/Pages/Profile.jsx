@@ -101,7 +101,7 @@ setName(profile.name)
            
               collection.map(item=>{
                 console.log(item)
-                return <Model   name={item.name} ></Model>
+                return <Model   name={item.name} image={item.url}></Model>
             })
             
           }

@@ -46,7 +46,7 @@ const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const saveToStorage = async (file, user, name, modelId, modelUrl) => {
+export const saveToStorage = async (file, user, name, modelId) => {
   try {
     let id = generateID();
     const docRef = doc(db, `users/${user.uid}`);
@@ -70,7 +70,6 @@ export const saveToStorage = async (file, user, name, modelId, modelUrl) => {
       directory: collectionDir,
       name: name,
       modelId: modelId,
-      modelUrl: modelUrl,
     });
     const pastMeta = await getDoc(collectionsMetaData);
     console.log(pastMeta.data() ? "Count is valid" : "Count is not valid");
@@ -102,18 +101,31 @@ export const loadUserCollections = async (user) => {
 
     const snapshot = await getDocs(collectionRef);
     const documents = [];
-    const modelCollection = collection(db, models);
+    const modelCollection = collection(db, "models");
     const models = {};
     const modelSnapshot = await getDocs(modelCollection);
     modelSnapshot.forEach((doc) => {
       const document = doc.data();
       models[document.id] = document;
     });
-    snapshot.forEach((doc) => {
+    console.log(models);
+    snapshot.forEach(async (doc) => {
       const document = doc.data();
       const modelId = document.modelId;
 
-      documents.push(document);
+      let dir = document.directory;
+      dir = "collections/" + dir.split("").join("/") + "/model";
+
+      let storageRef = ref(storage, dir);
+
+      const url = await getDownloadURL(storageRef);
+
+      documents.push({
+        ...document,
+        directory: url,
+        url: models[modelId].demo,
+        model: models[modelId].model,
+      });
     });
 
     return documents;
