@@ -97,9 +97,16 @@ setName(profile.name)
            </div>
            <div className="collections">
            {collection.length>0&&
-            <>Yes I have collections</>}
+           
+              collection.map(model=>{
+                return <h1>{model.name}</h1>
+            })
+            
+          }
             {collection.length==0 &&
-            <>You do not have collections</>}
+            <>
+          
+            </>}
            </div>
      </div>
     )

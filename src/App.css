@@ -318,6 +318,12 @@ width:110px;
   background-color: rgba(0, 0, 0, 0.95);
   border-radius:40px;
   margin:auto;
+  display:flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap:wrap;
+  gap:20px;
+
 }
 
 .profile-name{
