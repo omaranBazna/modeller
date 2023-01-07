@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { saveUserProfile } from "../utils/firebase";
+import { saveUserProfile,loadUserCollections } from "../utils/firebase";
 import { useState } from "react";
 export default function Profile({user,setUser,profile,setProfile}){
 const [editable,setEditable]=useState(true);
@@ -34,8 +34,7 @@ setProfile({name:name,url:tempURL?tempURL:profile.url})
 
 }
 const handelLoadCollections=async()=>{
-
-
+const data=await loadUserCollections(user);
 }
 useEffect(()=>{
  const userString=window.localStorage.getItem("user")

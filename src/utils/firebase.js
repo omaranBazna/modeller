@@ -88,6 +88,28 @@ export const saveToStorage = async (file, user, name, modelId, modelUrl) => {
   }
 };
 
+export const loadUserCollections = async (user) => {
+  try {
+    const userDocRef = doc(db, `users/${user.uid}`);
+
+    const userDoc = await getDoc(userDocRef);
+    const collectionURL = userDoc.data().collections;
+    const collectionRef = collection(
+      db,
+      `collections/${collectionURL}/collections`
+    );
+
+    const snapshot = await getDocs(collectionRef);
+    const documents = [];
+    snapshot.forEach((doc) => {
+      documents.push(doc.data());
+    });
+    console.log(documents);
+    return documents;
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const saveUserProfile = async (user, name, file) => {
   try {
     if (file) {
