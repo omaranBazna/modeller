@@ -6,7 +6,6 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
-  signInWithCustomToken,
   setPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
@@ -62,9 +61,9 @@ export const saveToStorage = async (file, user, name) => {
     } else {
       id = data.collections;
     }
-
+    let saveId = generateID();
     let collectionDir = generateDirectory();
-    const modelRef = doc(db, `collections/${id}`);
+    const modelRef = doc(db, `collections/${id}/collections/${saveId}`);
     await setDoc(modelRef, {
       directory: collectionDir,
     });
