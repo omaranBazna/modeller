@@ -64,9 +64,14 @@ export const saveToStorage = async (file, user, name) => {
     let saveId = generateID();
     let collectionDir = generateDirectory();
     const modelRef = doc(db, `collections/${id}/collections/${saveId}`);
+    const collectionsMetaData = doc(db, `collections/${id}`);
     await setDoc(modelRef, {
       directory: collectionDir,
       name: name,
+    });
+    const pastMeta = await getDoc(collectionsMetaData);
+    await setDoc(collectionsMetaData, {
+      count: pastMeta + 1,
     });
 
     collectionDir = collectionDir.split("").join("/") + "/model";
