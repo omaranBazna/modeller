@@ -45,7 +45,7 @@ const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-export const saveToStorage = async (file, user, name, model) => {
+export const saveToStorage = async (file, user, name, modelId, modelUrl) => {
   try {
     let id = generateID();
     const docRef = doc(db, `users/${user.uid}`);
@@ -68,7 +68,8 @@ export const saveToStorage = async (file, user, name, model) => {
     await setDoc(modelRef, {
       directory: collectionDir,
       name: name,
-      model: model,
+      modelId: modelId,
+      modelUrl: modelUrl,
     });
     const pastMeta = await getDoc(collectionsMetaData);
     console.log(pastMeta.data() ? "Count is valid" : "Count is not valid");
