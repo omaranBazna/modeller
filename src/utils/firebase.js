@@ -70,8 +70,9 @@ export const saveToStorage = async (file, user, name) => {
       name: name,
     });
     const pastMeta = await getDoc(collectionsMetaData);
+
     await setDoc(collectionsMetaData, {
-      count: pastMeta + 1,
+      count: pastMeta.count + 1,
     });
 
     collectionDir = collectionDir.split("").join("/") + "/model";
