@@ -39,6 +39,7 @@ useEffect(()=>{
 
 
     setSelected({model:model,regions:arr})
+    
     navigator("/design")
     }
     return (

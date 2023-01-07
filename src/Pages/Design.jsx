@@ -29,16 +29,9 @@ export default function Design({user,setUser,selected}){
       from: { y: -10 ,  opacity:0},
     to:async (next, cancel) => {
     await next({ y: 60 ,  opacity:1})
-    
     await next({ y: 60.001 ,  opacity:1})
-    
     await next({ y: 60 ,  opacity:1})
-    
     await next({ y: 60.001 ,  opacity:1})
- 
-   
-    
-    
     await next({ y: -60 ,  opacity:0})
 
   },
@@ -60,7 +53,7 @@ export default function Design({user,setUser,selected}){
     document.querySelector("#draw").toBlob(function(blob){
      
       
-      saveToStorage( blob,user,name).then((result)=>{
+      saveToStorage( blob,user,name, selected.model).then((result)=>{
        handleAnimation();
        setDownload(false);
       }).catch(e=>{
@@ -90,7 +83,7 @@ export default function Design({user,setUser,selected}){
     navigator("/")
    }
 
- 
+
 setUpThree(selected.model,selected.regions)
 
  
