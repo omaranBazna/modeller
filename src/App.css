@@ -111,21 +111,37 @@ flex-direction: column;
 }
 
 .colorEl{
+  
+  box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
+}
+
+.brushTools{
   position:absolute;
   top:100px;
   left:20px;
   z-index:10;
-  box-shadow: 6px 6px 2px 1px rgba(71, 71, 112, 0.643);
+}
+.demo{
+  margin:20px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.demo-box{
+
+  height:60px;
+  width:60px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.brush-circle{
+  height:50px;
+  width:50px;
+  background-color: brown;
+  border-radius:50%;
 }
 
-
-.brush-range{
-  position:absolute;
-  top:400px;
-  left:20px;
-  z-index:10;
-
-}
 .select {
   position: absolute;
   top:180px;

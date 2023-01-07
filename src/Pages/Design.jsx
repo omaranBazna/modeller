@@ -17,6 +17,7 @@ const options = [
 ];
 export default function Design({user,setUser,selected}){
 
+  const [radius,setRadius]=useState(10)
   const [springs, api] = useSpring(()=>({
     from: { y: -100 ,  opacity:0}
   }))
@@ -89,12 +90,10 @@ export default function Design({user,setUser,selected}){
     navigator("/")
    }
 
-   if(selected){
-   setUpThree(selected.model,selected.regions)
+ 
+setUpThree(selected.model,selected.regions)
 
-   }else{
-       setUpThree();
-   }
+ 
 
     },[])
     return (
@@ -149,11 +148,24 @@ export default function Design({user,setUser,selected}){
          <Select className="select" components={{ Option: ()=>{
       return <img src="https://icons.iconarchive.com/icons/iconsmind/outline/512/Cursor-Move-icon.png" />
     } }} options={options} />
+     
+     
+     <div className="brushTools">
       <HexColorPicker className="colorEl" id="colorEl" data-color={color} color={color} onChange={setColor}>
 
 
       </HexColorPicker>
-      <input id="brush-range" className="brush-range" type="range" min="1" max="10" />
+      <div className="demo">
+      <input id="brush-range" className="brush-range" type="range" min="1" max="10" value={radius}  onChange={(e)=>{setRadius(e.target.value)}}/>
+      <div className="demo-box">
+         <div className="brush-circle" style={{width:(radius*5),height:(radius*5),backgroundColor:color}}>
+
+         </div>
+      </div>
+     </div>
+   
+     </div>
+     
         <canvas id="bg"  width="1200" height="200"/>
        
       

@@ -280,6 +280,7 @@ export const setUpThree = (url, regions) => {
       return;
     }
 
+    radius = document.getElementById("brush-range").value / 100;
     texture2.needsUpdate = true;
 
     //Obj.rotation.y = 120;
