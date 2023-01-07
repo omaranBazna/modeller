@@ -8,6 +8,7 @@ const [editable,setEditable]=useState(true);
 const [name,setName]=useState("");
 const [tempURL,setTempUrl]=useState("")
 const [file,setFile]=useState(null);
+const [collection,setCollection]=useState([])
 const navigator=useNavigate();
 const loadPic=(e)=>{
 
@@ -35,6 +36,8 @@ setProfile({name:name,url:tempURL?tempURL:profile.url})
 }
 const handelLoadCollections=async()=>{
 const data=await loadUserCollections(user);
+setCollection(data);
+
 }
 useEffect(()=>{
  const userString=window.localStorage.getItem("user")
@@ -93,7 +96,10 @@ setName(profile.name)
                </div>
            </div>
            <div className="collections">
-           
+           {collection.length>0&&
+            <>Yes I have collections</>}
+            {collection.length==0 &&
+            <>You do not have collections</>}
            </div>
      </div>
     )

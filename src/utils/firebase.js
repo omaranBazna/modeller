@@ -104,7 +104,7 @@ export const loadUserCollections = async (user) => {
     snapshot.forEach((doc) => {
       documents.push(doc.data());
     });
-    console.log(documents);
+
     return documents;
   } catch (e) {
     console.log(e);
