@@ -33,6 +33,10 @@ await saveUserProfile(user,name,file);
 setProfile({name:name,url:tempURL?tempURL:profile.url})
 
 }
+const handelLoadCollections=async()=>{
+
+
+}
 useEffect(()=>{
  const userString=window.localStorage.getItem("user")
  if(userString !=""){
@@ -47,6 +51,7 @@ useEffect(()=>{
  }else{
   navigator("/")
  }
+handelLoadCollections();
 setName(profile.name)
  },[])
 
