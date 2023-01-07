@@ -16,6 +16,7 @@ import {
   setDoc,
   getDocs,
   getDoc,
+  query,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -101,8 +102,18 @@ export const loadUserCollections = async (user) => {
 
     const snapshot = await getDocs(collectionRef);
     const documents = [];
+    const modelCollection = collection(db, models);
+    const models = {};
+    const modelSnapshot = await getDocs(modelCollection);
+    modelSnapshot.forEach((doc) => {
+      const document = doc.data();
+      models[document.id] = document;
+    });
     snapshot.forEach((doc) => {
-      documents.push(doc.data());
+      const document = doc.data();
+      const modelId = document.modelId;
+
+      documents.push(document);
     });
 
     return documents;

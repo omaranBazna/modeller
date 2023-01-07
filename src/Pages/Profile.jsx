@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 
 import { saveUserProfile,loadUserCollections } from "../utils/firebase";
 import { useState } from "react";
+import Model from "../Components/Model";
 export default function Profile({user,setUser,profile,setProfile}){
 const [editable,setEditable]=useState(true);
 const [name,setName]=useState("");
@@ -98,8 +99,9 @@ setName(profile.name)
            <div className="collections">
            {collection.length>0&&
            
-              collection.map(model=>{
-                return <h1>{model.name}</h1>
+              collection.map(item=>{
+                console.log(item)
+                return <Model   name={item.name} ></Model>
             })
             
           }
