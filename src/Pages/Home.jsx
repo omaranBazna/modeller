@@ -38,13 +38,11 @@ const loadModels=async()=>{
 
 
 
-      const openModel=async(model,regions)=>{
+      const openModel=async(model,regions,id)=>{
         const response=await fetch(regions)
         const text=await response.text()
         const arr=text.split(",").map(x=>eval(x))
-    
-    
-        setSelected({model:model,regions:arr})
+        setSelected({model:model,regions:arr,id:id})
         navigator("/design")
         }
 
@@ -72,7 +70,7 @@ const loadModels=async()=>{
             {models.map((item,index)=>{
             
              return (
-             <div key={index} onClick={()=>{openModel(item.model,item.regions)}}>
+             <div key={index} onClick={()=>{openModel(item.model,item.regions,item.id)}}>
              <Model   name={item.name} image={item.demo}></Model>
              </div>)
             })}

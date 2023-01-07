@@ -52,8 +52,8 @@ export default function Design({user,setUser,selected}){
     setDownload(true);
     document.querySelector("#draw").toBlob(function(blob){
      
-      
-      saveToStorage( blob,user,name, selected.model).then((result)=>{
+      console.log(selected.id)
+      saveToStorage( blob,user,name, selected.id).then((result)=>{
        handleAnimation();
        setDownload(false);
       }).catch(e=>{
